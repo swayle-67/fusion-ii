@@ -1,0 +1,161 @@
+{% extends "layout.html" %}
+
+{% block title %}Register — FUSION II{% endblock %}
+
+{% block content %}
+
+<canvas id="pricing-bg"></canvas>
+
+<section class="auth-page">
+
+  <div class="auth-shell" data-reveal>
+
+    <div class="auth-glow auth-glow-1"></div>
+    <div class="auth-glow auth-glow-2"></div>
+
+    <!-- LEFT SIDE -->
+    <div class="auth-left">
+
+      <p class="section-label">EchoForge Access</p>
+
+      <h1 class="auth-title">
+        Create Your<br>
+        <span>Fusion II</span> Account
+      </h1>
+
+      <p class="auth-sub">
+        Enter the EchoForge ecosystem and start building intelligent systems,
+        scalable infrastructure, and next-generation AI experiences.
+      </p>
+
+      <div class="auth-features">
+
+        <div class="auth-feature">
+          <div class="auth-feature-line"></div>
+          <div>
+            <h4>AI Infrastructure</h4>
+            <p>Deploy intelligent systems at scale.</p>
+          </div>
+        </div>
+
+        <div class="auth-feature">
+          <div class="auth-feature-line"></div>
+          <div>
+            <h4>Secure Workspace</h4>
+            <p>Protected access to Fusion II services.</p>
+          </div>
+        </div>
+
+        <div class="auth-feature">
+          <div class="auth-feature-line"></div>
+          <div>
+            <h4>EchoForge Core</h4>
+            <p>Integrated automation and neural workflows.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="auth-card">
+
+      <div class="auth-card-top">
+
+        <div class="auth-status">
+          <span class="pulse-dot"></span>
+          REGISTRATION ACTIVE
+        </div>
+
+        <h2>Create Account</h2>
+
+      </div>
+
+      <form action="/register" method="POST" class="auth-form">
+
+        <div class="auth-group">
+          <label>USERNAME</label>
+          <input
+            type="text"
+            name="username"
+            placeholder="ENTER USERNAME"
+            required
+            autocomplete="username"
+          >
+        </div>
+
+        <div class="auth-group">
+          <label>EMAIL</label>
+          <input
+            type="email"
+            name="email"
+            placeholder="ENTER EMAIL"
+            required
+            autocomplete="email"
+          >
+        </div>
+
+        <div class="auth-group">
+          <label>PASSWORD</label>
+          <input
+            type="password"
+            name="password"
+            placeholder="ENTER PASSWORD"
+            required
+            autocomplete="new-password"
+          >
+        </div>
+
+        <div class="auth-group">
+          <label>CONFIRM PASSWORD</label>
+          <input
+            type="password"
+            name="confirmation"
+            placeholder="CONFIRM PASSWORD"
+            required
+            autocomplete="new-password"
+          >
+        </div>
+
+        <button type="submit" class="auth-btn">
+          INITIALISE ACCOUNT <span>›</span>
+        </button>
+
+      </form>
+
+      <div class="auth-divider">
+        <span>SYSTEM ACCESS</span>
+      </div>
+
+      <div class="auth-switch-wrap">
+
+        <a href="/login" class="auth-switch-box">
+          <span class="auth-switch-label">
+            ALREADY HAVE AN ACCOUNT?
+          </span>
+
+          <span class="auth-switch-action">
+            LOGIN ›
+          </span>
+        </a>
+
+        <a href="/register" class="auth-switch-box active">
+          <span class="auth-switch-label">
+            NEW TO ECHOFORGE?
+          </span>
+
+          <span class="auth-switch-action">
+            REGISTER ›
+          </span>
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+{% endblock %}

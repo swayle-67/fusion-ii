@@ -1,0 +1,152 @@
+{% extends "layout.html" %}
+
+{% block title %}FUSION II — EchoForge{% endblock %}
+
+{% block content %}
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <canvas id="bg-canvas"></canvas>
+  <div class="hero-grid"></div>
+  
+  <div class="hero-image">
+    <video autoplay muted loop playsinline>
+      <source src="{{ url_for('static', filename='video/bg.mp4') }}" type="video/mp4">
+    </video>
+  </div>
+
+  <div class="hero-content">
+    <p class="eyebrow" data-reveal><span class="eyebrow-dot"></span>Powered by Fusion II</p>
+    <h1 class="hero-heading" data-reveal>
+      Intelligence<br>
+      <em id="cycling-word">Grows</em> Here.
+    </h1>
+    <p class="hero-body" data-reveal>
+      EchoForge is our AI engine—rooted deep in infrastructure,
+      branching into every part of your business, and evolving to
+      help you scale beyond limits.
+    </p>
+    <div class="hero-ctas" data-reveal>
+      <a href="#services" class="btn-primary">Explore EchoForge <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 6h10M7 2l4 4-4 4"/></svg></a>
+      <a href="/portfolio" class="btn-secondary">View Our Work <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 6h10M7 2l4 4-4 4"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section class="section-services" id="services">
+  <div class="container">
+    <p class="section-label" data-reveal>What We Build</p>
+    <h2 class="section-heading" data-reveal>Services Powered<br>by <span class="accent-text">EchoForge</span></h2>
+    <div class="services-grid">
+      <div class="service-card" data-reveal>
+        <div class="service-num">01</div>
+        <h3>AI Infrastructure</h3>
+        <p>End-to-end ML pipelines, model deployment, and scalable AI architecture built for enterprise workloads.</p>
+        <div class="card-line"></div>
+      </div>
+      <div class="service-card" data-reveal>
+        <div class="service-num">02</div>
+        <h3>Intelligent Automation</h3>
+        <p>Workflow automation that learns and adapts—reducing friction across every department in your organisation.</p>
+        <div class="card-line"></div>
+      </div>
+      <div class="service-card" data-reveal>
+        <div class="service-num">03</div>
+        <h3>Data Intelligence</h3>
+        <p>Real-time analytics and predictive modelling that transform raw data into decisive business clarity.</p>
+        <div class="card-line"></div>
+      </div>
+      <div class="service-card" data-reveal>
+        <div class="service-num">04</div>
+        <h3>Custom LLM Solutions</h3>
+        <p>Fine-tuned language models trained on your data, integrated seamlessly into your existing stack.</p>
+        <div class="card-line"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS ── -->
+<div class="stats-band">
+  <div class="stat-item" data-reveal>
+    <span class="stat-num" data-count="81">0</span><span class="stat-unit">%</span>
+    <p>Of buyers research online before contacting a business</p>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item" data-reveal>
+    <span class="stat-num" data-count="3">0</span><span class="stat-unit">×</span>
+    <p>More leads from a website than social media alone</p>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item" data-reveal>
+    <span class="stat-num" data-count="40">0</span><span class="stat-unit">%</span>
+    <p>Of businesses without AI are losing ground to competitors</p>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item" data-reveal>
+    <span class="stat-num" data-count="70">0</span><span class="stat-unit">%+</span>
+    <p>Of customers won't engage a business with no online presence</p>
+  </div>
+</div>
+
+<!-- ── ABOUT ── -->
+<section class="section-about" id="about">
+  <div class="container about-inner">
+    <div class="about-text">
+      <p class="section-label" data-reveal>The Engine</p>
+      <h2 class="section-heading" data-reveal>What is<br><span class="accent-text">EchoForge?</span></h2>
+      <p class="about-body" data-reveal>EchoForge is the proprietary AI engine at the core of every Fusion II product. Built from first principles to handle the complexity of real business environments—not sandbox demos.</p>
+      <p class="about-body" data-reveal>It listens, adapts, and evolves. Every interaction teaches it more about your domain. Every deployment makes it sharper.</p>
+      <a href="/chat" class="btn-primary" data-reveal>Learn More <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 6h10M7 2l4 4-4 4"/></svg></a>
+    </div>
+    <div class="about-visual" data-reveal>
+      <div class="orb-wrap">
+        <div class="orb o1"></div>
+        <div class="orb o2"></div>
+        <div class="orb o3"></div>
+        <div class="ring r1"></div>
+        <div class="ring r2"></div>
+        <div class="orb-core">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="20,4 36,12 36,28 20,36 4,28 4,12" stroke="#00d4ff" stroke-width="1.5" fill="none"/>
+            <path d="M20 14 L15 20 L20 26 L25 20 Z" fill="#00d4ff" opacity="0.8"/>
+          </svg>
+        </div>
+        <span class="orb-label">EchoForge v3.2</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer" id="contact">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="nav__logo">FUSION <span>II</span></span>
+      <p>Intelligence grows here.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#about">About</a><a href="/pricing">Systems</a><a href="/portfolio">Why AI</a>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="/pricing#ai-models">EchoForge</a><a href="#services">Services</a><a href="/portfolio">Portfolio</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:fusionii.nexus@gmail.com">fusionii.nexus@gmail.com</a><a href="https://wa.me/27813779669" >+27 81 377 9669</a><a href="https://wa.me/27724143591">+27 72 414 3591</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom container">
+    <p>© 2026 Fusion II. All rights reserved.</p>
+    <div class="footer-socials">
+      <a href="#">𝕏</a><a href="https://instagram.com/fusion_ii_">in</a><a href="#">gh</a>
+    </div>
+  </div>
+</footer>
+
+{% endblock %}

@@ -1,0 +1,259 @@
+{% extends "layout.html" %}
+{% block title %}FUSION II — Bookings{% endblock %}
+
+{% block content %}
+
+<style>
+.bookings-page {
+  position: relative;
+  min-height: 100vh;
+  padding: calc(var(--nav-h) + 60px) 60px 100px;
+  z-index: 2;
+}
+.bookings-page::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(0,212,255,.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,.02) 1px, transparent 1px);
+  background-size: 54px 54px;
+  pointer-events: none;
+}
+
+.bookings-wrap {
+  position: relative; z-index: 2;
+  max-width: 1100px; margin: 0 auto;
+}
+
+.bookings-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 48px; padding-bottom: 32px;
+  border-bottom: 1px solid rgba(0,212,255,.08);
+  flex-wrap: wrap; gap: 20px;
+}
+
+.bookings-header h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 900; text-transform: uppercase;
+  color: #fff; line-height: 1.1;
+}
+.bookings-header h1 span { color: var(--c); }
+
+.bookings-count {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: .65rem; letter-spacing: .15em;
+  color: rgba(0,212,255,.5);
+}
+.bookings-count strong { color: var(--c); font-size: 1.4rem; font-family: 'Orbitron', sans-serif; }
+
+/* ── STATS ── */
+.bookings-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 2px; background: rgba(0,212,255,.06);
+  margin-bottom: 40px;
+}
+.stat-box {
+  background: var(--bg2); padding: 24px 28px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.stat-box-label {
+  font-family: 'Orbitron', sans-serif; font-size: .5rem;
+  letter-spacing: .2em; color: rgba(0,212,255,.5);
+  text-transform: uppercase;
+}
+.stat-box-val {
+  font-family: 'Orbitron', sans-serif; font-size: 2rem;
+  font-weight: 900; color: var(--c); line-height: 1;
+}
+
+/* ── TABLE ── */
+.bookings-table-wrap {
+  overflow-x: auto;
+  border: 1px solid rgba(0,212,255,.08);
+}
+
+table {
+  width: 100%; border-collapse: collapse;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+thead tr {
+  background: rgba(0,212,255,.04);
+  border-bottom: 1px solid rgba(0,212,255,.12);
+}
+
+thead th {
+  font-family: 'Orbitron', sans-serif;
+  font-size: .5rem; letter-spacing: .18em;
+  text-transform: uppercase; color: rgba(0,212,255,.6);
+  padding: 16px 20px; text-align: left; font-weight: 700;
+  white-space: nowrap;
+}
+
+tbody tr {
+  border-bottom: 1px solid rgba(0,212,255,.05);
+  transition: background .2s;
+}
+tbody tr:hover { background: rgba(0,212,255,.03); }
+tbody tr:last-child { border-bottom: none; }
+
+tbody td {
+  padding: 16px 20px; font-size: .95rem;
+  color: rgba(232,240,255,.7); font-weight: 300;
+  vertical-align: top;
+}
+
+.td-name { color: #fff; font-weight: 600; }
+.td-phone { color: var(--c); font-family: 'Share Tech Mono', monospace; font-size: .8rem; }
+.td-slot {
+  display: inline-block;
+  font-family: 'Orbitron', sans-serif; font-size: .48rem;
+  letter-spacing: .1em; padding: 4px 10px;
+  border: 1px solid rgba(155,68,255,.3);
+  background: rgba(155,68,255,.08); color: #d0a0ff;
+  white-space: nowrap;
+}
+.td-notes { max-width: 220px; font-size: .88rem; line-height: 1.5; }
+.td-time {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: .68rem; color: rgba(232,240,255,.3);
+  white-space: nowrap;
+}
+.td-id {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: .65rem; color: rgba(0,212,255,.3);
+}
+
+.delete-btn {
+  font-family: 'Orbitron', sans-serif; font-size: .45rem;
+  letter-spacing: .1em; padding: 5px 12px;
+  background: none; border: 1px solid rgba(255,60,60,.3);
+  color: rgba(255,100,100,.6); cursor: pointer;
+  transition: all .2s;
+}
+.delete-btn:hover {
+  background: rgba(255,60,60,.08);
+  border-color: rgba(255,60,60,.7);
+  color: #ff6060;
+}
+
+/* ── EMPTY STATE ── */
+.bookings-empty {
+  text-align: center; padding: 80px 40px;
+  border: 1px solid rgba(0,212,255,.06);
+  background: rgba(5,8,15,.5);
+}
+.bookings-empty h3 {
+  font-family: 'Orbitron', sans-serif; font-size: 1rem;
+  font-weight: 700; color: rgba(232,240,255,.3);
+  letter-spacing: .1em; text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.bookings-empty p {
+  font-family: 'Rajdhani', sans-serif; font-size: .95rem;
+  color: rgba(232,240,255,.2); font-weight: 300;
+}
+
+/* flash messages */
+.flash { padding: 12px 20px; margin-bottom: 24px; font-family: 'Rajdhani', sans-serif; font-size: .95rem; border-left: 2px solid; }
+.flash.info { border-color: var(--c); background: rgba(0,212,255,.05); color: rgba(232,240,255,.7); }
+.flash.error { border-color: #ff4444; background: rgba(255,68,68,.05); color: #ff8080; }
+
+@media (max-width: 768px) {
+  .bookings-page { padding: calc(var(--nav-h) + 40px) 20px 80px; }
+  .bookings-stats { grid-template-columns: 1fr; }
+  thead th:nth-child(4), tbody td:nth-child(4) { display: none; }
+}
+</style>
+
+<section class="bookings-page">
+  <div class="bookings-wrap">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <div class="bookings-header" data-reveal>
+      <div>
+        <div class="section-label">ADMIN PANEL</div>
+        <h1>CHAT <span>BOOKINGS</span></h1>
+      </div>
+      <div class="bookings-count">
+        TOTAL LEADS<br>
+        <strong>{{ bookings|length }}</strong>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    {% if bookings %}
+    <div class="bookings-stats" data-reveal>
+      <div class="stat-box">
+        <div class="stat-box-label">Total Bookings</div>
+        <div class="stat-box-val">{{ bookings|length }}</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-label">Most Recent</div>
+        <div class="stat-box-val" style="font-size:1rem;margin-top:4px;color:#fff;">{{ bookings[0].name }}</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-label">Latest Slot</div>
+        <div class="stat-box-val" style="font-size:.85rem;margin-top:4px;color:var(--p);">{{ bookings[0].slot }}</div>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="bookings-table-wrap" data-reveal>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Slot</th>
+            <th>Notes</th>
+            <th>Received</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for b in bookings %}
+          <tr>
+            <td class="td-id">#{{ b.id }}</td>
+            <td class="td-name">{{ b.name }}</td>
+            <td class="td-phone">{{ b.phone }}</td>
+            <td><span class="td-slot">{{ b.slot }}</span></td>
+            <td class="td-notes">{{ b.notes or '—' }}</td>
+            <td class="td-time">{{ b.timestamp[:16] if b.timestamp else '—' }}</td>
+            <td>
+              <form method="POST" action="/admin/bookings/delete/{{ b.id }}"
+                onsubmit="return confirm('Delete this booking?')">
+                <button type="submit" class="delete-btn">DELETE</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% else %}
+    <div class="bookings-empty" data-reveal>
+      <h3>No Bookings Yet</h3>
+      <p>Leads captured through EchoForge will appear here.</p>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<script>
+const observer = new IntersectionObserver(els => {
+  els.forEach(el => { if (el.isIntersecting) el.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+</script>
+
+{% endblock %}

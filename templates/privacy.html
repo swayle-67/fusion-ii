@@ -1,0 +1,339 @@
+{% extends "layout.html" %}
+{% block title %}FUSION II — Privacy Policy{% endblock %}
+
+{% block content %}
+
+<style>
+.privacy-page {
+  position: relative;
+  min-height: 100vh;
+  padding: calc(var(--nav-h) + 60px) 60px 100px;
+  z-index: 2;
+}
+
+.privacy-page::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(0,212,255,.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,.02) 1px, transparent 1px);
+  background-size: 54px 54px;
+  pointer-events: none;
+}
+
+.privacy-wrap {
+  position: relative; z-index: 2;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.privacy-header {
+  margin-bottom: 60px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(0,212,255,.08);
+}
+
+.privacy-header .section-label { margin-bottom: 12px; }
+
+.privacy-header h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.privacy-header h1 span { color: var(--c); }
+
+.privacy-meta {
+  display: flex; gap: 32px; flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.privacy-meta-item {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: .65rem; letter-spacing: .1em;
+  color: rgba(232,240,255,.4);
+}
+
+.privacy-meta-item span { color: var(--c); }
+
+/* ── SECTIONS ── */
+.privacy-section {
+  margin-bottom: 48px;
+  padding: 32px;
+  background: rgba(5,8,15,.6);
+  border: 1px solid rgba(0,212,255,.06);
+  border-left: 2px solid var(--p);
+  position: relative;
+}
+
+.privacy-section:hover {
+  border-left-color: var(--c);
+  background: rgba(0,212,255,.02);
+  transition: all .3s;
+}
+
+.privacy-section-num {
+  font-family: 'Orbitron', sans-serif;
+  font-size: .5rem; letter-spacing: .2em;
+  color: rgba(0,212,255,.4);
+  margin-bottom: 10px;
+}
+
+.privacy-section h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: .9rem; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: #fff; margin-bottom: 18px;
+}
+
+.privacy-section p, .privacy-section li {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem; line-height: 1.8;
+  color: rgba(232,240,255,.65);
+  font-weight: 300;
+  margin-bottom: 12px;
+}
+
+.privacy-section ul {
+  list-style: none;
+  padding: 0; margin: 12px 0;
+}
+
+.privacy-section ul li {
+  padding-left: 18px;
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.privacy-section ul li::before {
+  content: '▸';
+  position: absolute; left: 0;
+  color: var(--c); font-size: .8rem;
+}
+
+.privacy-section a {
+  color: var(--c);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0,212,255,.3);
+  transition: border-color .2s;
+}
+.privacy-section a:hover { border-color: var(--c); }
+
+.privacy-highlight {
+  background: rgba(0,212,255,.05);
+  border: 1px solid rgba(0,212,255,.15);
+  padding: 16px 20px;
+  margin: 16px 0;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: .75rem; line-height: 1.7;
+  color: rgba(232,240,255,.6);
+  letter-spacing: .04em;
+}
+
+.privacy-footer-note {
+  margin-top: 60px;
+  padding: 28px 32px;
+  border: 1px solid rgba(155,68,255,.2);
+  background: rgba(155,68,255,.04);
+  display: flex; gap: 20px; align-items: flex-start;
+}
+
+.privacy-footer-note-icon {
+  font-size: 1.4rem; flex-shrink: 0; margin-top: 2px;
+}
+
+.privacy-footer-note p {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: .95rem; line-height: 1.7;
+  color: rgba(232,240,255,.55); font-weight: 300;
+}
+
+.privacy-footer-note p strong {
+  color: #fff; font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .privacy-page { padding: calc(var(--nav-h) + 40px) 24px 80px; }
+  .privacy-section { padding: 24px 20px; }
+  .privacy-meta { gap: 16px; }
+}
+</style>
+
+<section class="privacy-page">
+  <div class="privacy-wrap">
+
+    <div class="privacy-header" data-reveal>
+      <div class="section-label">LEGAL DOCUMENTATION</div>
+      <h1>PRIVACY <span>POLICY</span></h1>
+      <p style="font-family:'Rajdhani',sans-serif;font-size:1rem;color:rgba(232,240,255,.5);font-weight:300;max-width:560px;line-height:1.7;">
+        This Privacy Policy explains how FUSION II collects, uses, stores and protects your personal information in accordance with the Protection of Personal Information Act 4 of 2013 (POPIA).
+      </p>
+      <div class="privacy-meta">
+        <div class="privacy-meta-item">EFFECTIVE DATE <span>09 MAY 2026</span></div>
+        <div class="privacy-meta-item">JURISDICTION <span>REPUBLIC OF SOUTH AFRICA</span></div>
+        <div class="privacy-meta-item">GOVERNED BY <span>POPIA ACT 4 OF 2013</span></div>
+      </div>
+    </div>
+
+    <!-- 1 -->
+    <div class="privacy-section" data-reveal>
+      <div class="privacy-section-num">SECTION 01</div>
+      <h2>Who We Are</h2>
+      <p>FUSION II is a web design and AI integration service provider operating in South Africa. We build websites and AI-powered tools for small and medium businesses.</p>
+      <div class="privacy-highlight">
+        INFORMATION OFFICER: SUHAIL OMAR MAHOMED — omarsuhail786@gmail.com<br>
+        SECONDARY OFFICER: AJWAD MOHAMMED - ajwadmohammed48@gmail.com<br>
+        LOCATION: Westville, KwaZulu-Natal, South Africa<br>
+        WEBSITE: [#######.co.za]
+      </div>
+      <p>We are in the process of formal registration with the Information Regulator of South Africa as required under POPIA.</p>
+    </div>
+
+    <!-- 2 -->
+    <div class="privacy-section" data-reveal>
+      <div class="privacy-section-num">SECTION 02</div>
+      <h2>Information We Collect</h2>
+      <p>We collect personal information only when you voluntarily provide it through our AI chat assistant or contact forms. This may include:</p>
+      <ul>
+        <li>Your full name</li>
+        <li>Phone number</li>
+        <li>Business name and type</li>
+        <li>Website preferences and goals</li>
+        <li>Preferred appointment times</li>
+        <li>Any other information you choose to share in conversation</li>
+      </ul>
+      <p>We do not collect payment information, government ID numbers, or sensitive personal information as defined under POPIA.</p>
+    </div>
+
+    <!-- 3 -->
+    <div class="privacy-section" data-reveal>
+      <div class="privacy-section-num">SECTION 03</div>
+      <h2>AI Chat Assistant Disclosure</h2>
+      <p>Our website uses an AI-powered chat assistant called <strong style="color:#fff;">EchoForge</strong>. This is an automated system — not a human agent.</p>
+      <p>By engaging with EchoForge you acknowledge and agree that:</p>
+      <ul>
+        <li>You are communicating with an artificial intelligence system</li>
+        <li>Your messages are processed in real time by third-party AI infrastructure</li>
+        <li>Conversations are used solely to qualify your project requirements and schedule a consultation</li>
+        <li>No conversation data is used to train AI models without your explicit consent</li>
+      </ul>
+    </div>
+
+    <!-- 4 -->
+    <div class="privacy-section" data-reveal>
+      <div class="privacy-section-num">SECTION 04</div>
+      <h2>Third-Party Services</h2>
+      <p>To deliver our AI chat service we use the following third-party providers. Each has their own privacy policy and data processing terms:</p>
+      <ul>
+        <li><strong style="color:#fff;">Groq Inc.</strong> — AI inference provider that processes your chat messages to generate responses. Messages are transmitted securely and not stored permanently. <a href="https://groq.com/privacy-policy" target="_blank">Groq Privacy Policy →</a></li>
+        <li><strong style="color:#fff;">Cloudflare Inc.</strong> — Our worker infrastructure that routes requests between your browser and the AI provider. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank">Cloudflare Privacy Policy →</a></li>
+      </ul>
+      <p>We have selected providers that maintain high standards of data security and comply with international data protection regulations.</p>
+    </div>
+
+    <!-- 5 -->
+    <div class="privacy-section" data-reveal>
+      <div class="privacy-section-num">SECTION 05</div>
+      <h2>How We Use Your Information</h2>
+      <p>Information collected through our website and chat assistant is used exclusively for:</p>
+      <ul>
+        <li>Scheduling and confirming consultations with our team</li>
+        <li>Understanding your project requirements before a call</li>
+        <li>Following up on your enquiry</li>
+        <li>Sending you relevant service information you have requested</li>
+      </ul>
+      <p>We will never sell, rent, or share your personal information with third parties for marketing purposes. We do not use your data for profiling or automated decision-making that produces legal effects.</p>
+    </div>
+
+    <!-- 6 -->
+    <div class="privacy-section" data-reveal>
+      <div class="privacy-section-num">SECTION 06</div>
+      <h2>How We Store & Protect Your Information</h2>
+      <p>Booking details and contact information submitted through our platform are stored securely on our servers. We implement the following safeguards:</p>
+      <ul>
+        <li>SSL/TLS encryption on all data in transit</li>
+        <li>Access controls limiting who can view your information</li>
+        <li>Regular security reviews of our infrastructure</li>
+        <li>Data minimisation — we only store what is necessary</li>
+      </ul>
+      <p>We retain your personal information for no longer than 12 months from the date of your last interaction with us, unless a longer period is required by law or you have engaged our services.</p>
+    </div>
+
+    <!-- 7 -->
+    <div class="privacy-section" data-reveal>
+      <div class="privacy-section-num">SECTION 07</div>
+      <h2>Your Rights Under POPIA</h2>
+      <p>As a data subject under the Protection of Personal Information Act you have the right to:</p>
+      <ul>
+        <li><strong style="color:#fff;">Access</strong> — request a copy of the personal information we hold about you</li>
+        <li><strong style="color:#fff;">Correction</strong> — request that we correct inaccurate or outdated information</li>
+        <li><strong style="color:#fff;">Deletion</strong> — request that we delete your personal information</li>
+        <li><strong style="color:#fff;">Objection</strong> — object to the processing of your personal information</li>
+        <li><strong style="color:#fff;">Complaint</strong> — lodge a complaint with the Information Regulator of South Africa</li>
+      </ul>
+      <p>To exercise any of these rights, contact us at <a href="mailto:fusionii.nexus@gmail.com">fusionii.nexus@gmail.com</a>. We will respond within 30 days.</p>
+    </div>
+
+    <!-- 8 -->
+    <div class="privacy-section" data-reveal>
+      <div class="privacy-section-num">SECTION 08</div>
+      <h2>Cookies & Tracking</h2>
+      <p>Our website does not currently use tracking cookies or third-party analytics tools. We do not use Google Analytics, Meta Pixel, or any behavioural tracking software.</p>
+      <p>If this changes in future we will update this policy and notify users accordingly.</p>
+    </div>
+
+    <!-- 9 -->
+    <div class="privacy-section" data-reveal>
+      <div class="privacy-section-num">SECTION 09</div>
+      <h2>Children's Privacy</h2>
+      <p>Our services are intended for business owners and adults aged 18 and older. We do not knowingly collect personal information from individuals under the age of 18. If you believe a minor has submitted information through our platform please contact us immediately at <a href="mailto:fusionii.nexus@gmail.com">fusionii.nexus@gmail.com</a> and we will delete it promptly.</p>
+    </div>
+
+    <!-- 10 -->
+    <div class="privacy-section" data-reveal>
+      <div class="privacy-section-num">SECTION 10</div>
+      <h2>Changes to This Policy</h2>
+      <p>We may update this Privacy Policy from time to time to reflect changes in our services, legal requirements, or best practices. The effective date at the top of this page will be updated accordingly.</p>
+      <p>Continued use of our website after any changes constitutes your acceptance of the updated policy. We recommend reviewing this page periodically.</p>
+    </div>
+
+    <!-- 11 -->
+    <div class="privacy-section" data-reveal>
+      <div class="privacy-section-num">SECTION 11</div>
+      <h2>Contact & Complaints</h2>
+      <p>For any privacy-related queries, requests, or complaints contact our Information Officer:</p>
+      <div class="privacy-highlight">
+        EMAIL: fusionii.nexus@gmail.com<br>
+        RESPONSE TIME: Within 30 business days<br>
+        LOCATION: Westville, KwaZulu-Natal, South Africa
+      </div>
+      <p>If you are unsatisfied with our response you have the right to escalate your complaint to the <strong style="color:#fff;">Information Regulator of South Africa</strong>:</p>
+      <ul>
+        <li>Website: <a href="https://www.inforegulator.org.za" target="_blank">www.inforegulator.org.za</a></li>
+        <li>Email: <a href="mailto:inforeg@justice.gov.za">inforeg@justice.gov.za</a></li>
+        <li>Phone: 072 414 3591</li>
+      </ul>
+    </div>
+
+    <div class="privacy-footer-note" data-reveal>
+      <div class="privacy-footer-note-icon">⚡</div>
+      <p>
+        <strong>Important:</strong> This Privacy Policy was drafted in good faith to comply with the Protection of Personal Information Act 4 of 2013 (POPIA). FUSION II is committed to handling your personal information responsibly and transparently.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<script>
+const observer = new IntersectionObserver(els => {
+  els.forEach(el => { if (el.isIntersecting) el.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+</script>
+
+{% endblock %}

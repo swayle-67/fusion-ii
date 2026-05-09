@@ -1,0 +1,115 @@
+{% extends "layout.html" %}
+{% block title %}FUSION II — Portfolio{% endblock %}
+{% block content %}
+
+<canvas id="pricing-bg"></canvas>
+
+<div class="pricing-wrap">
+
+  <div class="pricing-header" data-reveal>
+    <p class="eyebrow"><span class="eyebrow-dot"></span>OUR WORK</p>
+    <h1 class="section-heading">PROJECTS &amp; <span class="accent-text">BUILDS</span></h1>
+    <p class="pricing-sub">A selection of solutions we've engineered across AI, web, and data infrastructure.</p>
+  </div>
+
+  <div class="port-grid" data-reveal>
+
+    {% for p in portfolio %}
+    <div class="port-card">
+      <div class="port-top">
+        <span class="port-tier">{{ p.tier }}</span>
+        {% if session.get("username") in ADMINS %}
+        <form method="POST" action="/portfolio/delete/{{ p.id }}" style="display:inline">
+          <button type="submit" class="port-delete" onclick="return confirm('Delete?')">✕</button>
+        </form>
+        {% endif %}
+      </div>
+      <h3 class="port-name">{{ p.business_name }}</h3>
+      <p class="port-desc">{{ p.description }}</p>
+      <div class="port-bottom">
+        <a href="{{ p.link }}" target="_blank" class="port-link">VIEW PROJECT ›</a>
+        <div class="port-rating">
+          {% set total = namespace(val=0, count=0) %}
+          {% for r in ratings if r.portfolio_id == p.id %}
+            {% set total.val = total.val + r.project_rating %}
+            {% set total.count = total.count + 1 %}
+          {% endfor %}
+          {% if total.count > 0 %}
+            {% set score = (total.val / total.count) | round | int %}
+            {% for i in range(5) %}
+            <svg class="rating-logo {% if i < score %}rating-active{% endif %}" width="14" height="14" viewBox="0 0 120 120">
+              <defs>
+                <linearGradient id="rl{{ loop.index }}x{{ p.id }}" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#8b3fff"/>
+                  <stop offset="100%" stop-color="#00d4ff"/>
+                </linearGradient>
+              </defs>
+              <polygon points="60,8 104,32 104,80 60,104 16,80 16,32" fill="none" stroke="url(#rl{{ loop.index }}x{{ p.id }})" stroke-width="6"/>
+              <circle cx="60" cy="56" r="14" fill="url(#rl{{ loop.index }}x{{ p.id }})"/>
+            </svg>
+            {% endfor %}
+            <span class="rating-count">({{ total.count }})</span>
+          {% else %}
+            <span class="rating-none">No ratings yet</span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="card-line"></div>
+    </div>
+    {% endfor %}
+
+    <!-- CTA card -->
+    <div class="port-card port-cta" data-reveal>
+      <div style="text-align:center;padding:1rem 0;display:flex;flex-direction:column;align-items:center;gap:0.75rem;height:100%;justify-content:center;">
+        <svg viewBox="0 0 60 60" fill="none" width="48" height="48">
+          <polygon points="30,5 55,18 55,42 30,55 5,42 5,18" stroke="#00d4ff" stroke-width="1.5" fill="none" opacity=".4"/>
+          <circle cx="30" cy="30" r="6" fill="#00d4ff" opacity=".5"/>
+        </svg>
+        <h3 class="port-name">YOUR PROJECT</h3>
+        <p class="port-desc">Have something in mind? Let's build it together.</p>
+        {% if session.get("username") in ADMINS %}
+          <a href="/portfolio/add" class="btn-primary" style="margin-top:0.5rem;display:inline-flex;gap:8px;align-items:center;">+ ADD PROJECT</a>
+        {% else %}
+          <a href="/#contact" class="btn-primary" style="margin-top:0.5rem;display:inline-flex;gap:8px;align-items:center;">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 6h10M7 2l4 4-4 4"/></svg>
+            LET'S TALK
+          </a>
+        {% endif %}
+      </div>
+      <div class="card-line"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const canvas = document.getElementById('pricing-bg');
+  const ctx = canvas.getContext('2d');
+  const nodes = [];
+  let phase = 0;
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  function rNode() { return { x:Math.random()*canvas.width, y:Math.random()*canvas.height, vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3, r:1+Math.random()*2, drift:Math.random()*Math.PI*2 }; }
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height); phase+=.003;
+    for(const n of nodes){
+      n.x+=n.vx+Math.cos(n.drift+phase)*.06; n.y+=n.vy+Math.sin(n.drift+phase)*.06;
+      if(n.x<-10)n.x=canvas.width+10; if(n.x>canvas.width+10)n.x=-10;
+      if(n.y<-10)n.y=canvas.height+10; if(n.y>canvas.height+10)n.y=-10;
+      const mix=.5+.5*Math.sin(n.x*.003+n.y*.002+phase);
+      const r=Math.round(25+(186-25)*mix),g=Math.round(0+(76-0)*mix),b=Math.round(212+(255-212)*mix);
+      ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${r},${g},${b},0.5)`; ctx.fill();
+    }
+    for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++){
+      const a=nodes[i],b=nodes[j],d=Math.hypot(a.x-b.x,a.y-b.y);
+      if(d<120){ctx.beginPath();ctx.strokeStyle=`rgba(0,212,255,${(1-d/120)*.12})`;ctx.lineWidth=.5;ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
+    }
+    requestAnimationFrame(draw);
+  }
+  resize(); for(let i=0;i<60;i++)nodes.push(rNode()); draw();
+  window.addEventListener('resize',resize);
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.1});
+  document.querySelectorAll('[data-reveal]').forEach(el=>obs.observe(el));
+</script>
+
+{% endblock %}

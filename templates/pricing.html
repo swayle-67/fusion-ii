@@ -1,0 +1,156 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<canvas id="pricing-bg"></canvas>
+
+<div class="pricing-wrap">
+
+  <div class="pricing-header" data-reveal>
+    <p class="eyebrow"><span class="eyebrow-dot"></span>WHAT WE OFFER</p>
+    <h1 class="section-heading">FUSION <span class="accent-text">CORE</span></h1>
+    <p class="pricing-sub">Premium websites and web applications built for modern businesses.</p>
+  </div>
+
+  <div class="pricing-grid" data-reveal>
+    <div class="p-card">
+      <p class="p-tier">FUSION LAUNCH</p>
+      <div class="p-price"><span class="p-sym">R</span><span class="p-amt">2500</span></div>
+      <p class="p-monthly">then <span>R400 / mo</span></p>
+      <p class="p-desc">A clean, high-performance website to establish your online presence.</p>
+      <hr class="p-divider">
+      <ul class="p-features">
+        <li><span class="p-chk">›</span>Up to 8 pages</li>
+        <li><span class="p-chk">›</span>Custom design</li>
+        <li><span class="p-chk">›</span>Mobile responsive</li>
+        <li><span class="p-chk">›</span>Hosting & maintenance</li>
+      </ul>
+      <a class="p-btn" href="/chat">GET STARTED</a>
+    </div>
+
+    <div class="p-card p-featured">
+      <span class="p-badge">MOST POPULAR</span>
+      <p class="p-tier">FUSION CORE </p>
+      <div class="p-price"><span class="p-sym">R</span><span class="p-amt">8000</span></div>
+      <p class="p-monthly">then <span>R700 / mo</span></p>
+      <p class="p-desc">A full web application with dynamic features and user functionality.</p>
+      <hr class="p-divider">
+      <ul class="p-features">
+        <li><span class="p-chk">›</span>Full web application</li>
+        <li><span class="p-chk">›</span>User auth & dashboard</li>
+        <li><span class="p-chk">›</span>Database integration</li>
+        <li><span class="p-chk">›</span>Hosting & maintenance</li>
+        <li><span class="p-chk">›</span>Priority support</li>
+      </ul>
+      <a class="p-btn p-btn-accent" href="/chat">GET STARTED</a>
+    </div>
+
+    <div class="p-card">
+      <p class="p-tier">FUSION NEXUS</p>
+      <div class="p-price"><span class="p-sym">R</span><span class="p-amt">22000</span></div>
+      <p class="p-monthly">then <span>R7500 / mo</span></p>
+      <p class="p-desc">Web application bundled with Echo Forge I — the complete package.</p>
+      <hr class="p-divider">
+      <ul class="p-features">
+        <li><span class="p-chk">›</span>Everything in FUSION CORE</li>
+        <li><span class="p-chk">›</span>Advanced integrations</li>
+        <li><span class="p-chk">›</span>3D design</li>
+        <li><span class="p-chk">›</span>Echo Forge assist <span class="p-free">FREE</span></li>
+      </ul>
+      <a class="p-btn" href="/chat">GET STARTED</a>
+    </div>
+  </div>
+
+  <div class="p-sep" data-reveal><hr><span>AI AGENTS</span><hr></div>
+
+  <div class="pricing-header" data-reveal>
+    <p class="eyebrow"><span class="eyebrow-dot"></span>AI BUILDING</p>
+    <h2 class="section-heading">ECHO <span class="accent-text">FORGE</span></h2>
+    <p class="pricing-sub">Intelligent AI agents built and deployed for your business. API costs billed separately.</p>
+  </div>
+
+  <div class="pricing-grid" data-reveal id="ai-models">
+    <div class="p-card">
+      <p class="p-tier">ECHO FORGE ASSIST</p>
+      <div class="p-price"><span class="p-sym">R</span><span class="p-amt">2500</span></div>
+      <p class="p-api">500 + API costs</p>
+      <p class="p-desc">Your first AI agent — automating a core business workflow.</p>
+      <hr class="p-divider">
+      <ul class="p-features">
+        <li><span class="p-chk p-chk-c">›</span>1 custom AI agent</li>
+        <li><span class="p-chk p-chk-c">›</span>Single workflow automation</li>
+        <li><span class="p-chk p-chk-c">›</span>Basic integrations</li>
+        <li><span class="p-chk p-chk-c">›</span>Handover & training</li>
+      </ul>
+      <a class="p-btn p-btn-c" href="/chat">BOOK A CALL</a>
+    </div>
+
+    <div class="p-card p-featured-c">
+      <span class="p-badge p-badge-c">MOST POWERFUL</span>
+      <p class="p-tier">ECHO FORGE SYNC</p>
+      <div class="p-price"><span class="p-sym">R</span><span class="p-amt">8,000</span></div>
+      <p class="p-api">1000 + API costs</p>
+      <p class="p-desc">Multi-agent system handling complex, multi-step business processes.</p>
+      <hr class="p-divider">
+      <ul class="p-features">
+        <li><span class="p-chk p-chk-c">›</span>Up to 3 AI agents</li>
+        <li><span class="p-chk p-chk-c">›</span>Multi-step automation</li>
+        <li><span class="p-chk p-chk-c">›</span>Advanced integrations</li>
+        <li><span class="p-chk p-chk-c">›</span>Priority support</li>
+        <li><span class="p-chk p-chk-c">›</span>Handover & training</li>
+      </ul>
+      <a class="p-btn p-btn-c" href="/chat">BOOK A CALL</a>
+    </div>
+
+    <div class="p-card">
+      <p class="p-tier">ECHO FORGE AUTONOMOUS</p>
+      <div class="p-price"><span class="p-sym">R</span><span class="p-amt">22000</span></div>
+      <p class="p-api">5000 + API costs</p>
+      <p class="p-desc">Enterprise-grade AI infrastructure — fully custom, fully integrated.</p>
+      <hr class="p-divider">
+      <ul class="p-features">
+        <li><span class="p-chk p-chk-c">›</span>Unlimited AI agents</li>
+        <li><span class="p-chk p-chk-c">›</span>Full business automation</li>
+        <li><span class="p-chk p-chk-c">›</span>Custom model fine-tuning</li>
+        <li><span class="p-chk p-chk-c">›</span>Dedicated account manager</li>
+        <li><span class="p-chk p-chk-c">›</span>SLA guarantee</li>
+      </ul>
+      <a class="p-btn p-btn-c" href="/chat">BOOK A CALL</a>
+    </div>
+  </div>
+  <p class="pricing-sub">Prices may vary depending on client add-ons</p>
+
+</div>
+
+<script>
+  // Neural bg
+  const canvas = document.getElementById('pricing-bg');
+  const ctx = canvas.getContext('2d');
+  const nodes = [];
+  let phase = 0;
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  function rNode() { return { x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3, r:1+Math.random()*2, drift:Math.random()*Math.PI*2 }; }
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height); phase+=.003;
+    for(const n of nodes){
+      n.x+=n.vx+Math.cos(n.drift+phase)*.06; n.y+=n.vy+Math.sin(n.drift+phase)*.06;
+      if(n.x<-10)n.x=canvas.width+10; if(n.x>canvas.width+10)n.x=-10;
+      if(n.y<-10)n.y=canvas.height+10; if(n.y>canvas.height+10)n.y=-10;
+      const mix=.5+.5*Math.sin(n.x*.003+n.y*.002+phase);
+      const r=Math.round(25+(186-25)*mix),g=Math.round(0+(76-0)*mix),b=Math.round(212+(255-212)*mix);
+      ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fillStyle=`rgba(${r},${g},${b},0.6)`; ctx.fill();
+    }
+    for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++){
+      const a=nodes[i],b=nodes[j],d=Math.hypot(a.x-b.x,a.y-b.y);
+      if(d<120){const al=(1-d/120)*.15; ctx.beginPath(); ctx.strokeStyle=`rgba(0,212,255,${al})`; ctx.lineWidth=.5; ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();}
+    }
+    requestAnimationFrame(draw);
+  }
+  resize(); for(let i=0;i<60;i++)nodes.push(rNode()); draw();
+  window.addEventListener('resize',resize);
+
+  // Reveal
+  const obs = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.1});
+  document.querySelectorAll('[data-reveal]').forEach(el=>obs.observe(el));
+</script>
+
+{% endblock %}

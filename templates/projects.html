@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+{% block title %}FUSION II — Add Project{% endblock %}
+{% block content %}
+
+<canvas id="pricing-bg"></canvas>
+
+<div class="pricing-wrap" style="max-width:600px">
+  <div class="pricing-header" data-reveal>
+    <p class="eyebrow"><span class="eyebrow-dot"></span>ADMIN</p>
+    <h1 class="section-heading">ADD <span class="accent-text">PROJECT</span></h1>
+  </div>
+
+  <div class="p-card" data-reveal style="margin-top:2rem">
+    <form method="POST" action="/portfolio/add">
+      <div class="form-group">
+        <label>BUSINESS NAME</label>
+        <input type="text" name="business_name" placeholder="Acme Corp" required>
+      </div>
+      <div class="form-group">
+        <label>DESCRIPTION</label>
+        <textarea name="description" rows="3" placeholder="What did we build for them..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>LINK</label>
+        <input type="url" name="link" placeholder="https://..." required>
+      </div>
+      <div class="form-group">
+        <label>TIER</label>
+        <select name="tier" required>
+          <option value="">— Select tier —</option>
+          <option>Fusion Core I</option>
+          <option>Fusion Core II</option>
+          <option>Fusion Core III</option>
+          <option>Echo Forge I</option>
+          <option>Echo Forge II</option>
+          <option>Echo Forge III</option>
+        </select>
+      </div>
+      <button type="submit" class="nav__cta" style="width:100%;justify-content:center;margin-top:0.5rem">ADD PROJECT <span>›</span></button>
+    </form>
+    <p style="text-align:center;margin-top:1rem"><a href="/portfolio" style="color:var(--dim);font-family:'Share Tech Mono',monospace;font-size:.7rem">← BACK TO PORTFOLIO</a></p>
+  </div>
+</div>
+
+<script>
+  const canvas = document.getElementById('pricing-bg');
+  const ctx = canvas.getContext('2d');
+  const nodes = [];
+  let phase = 0;
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height); phase+=.003;
+    for(const n of nodes){
+      n.x+=n.vx; n.y+=n.vy;
+      if(n.x<0)n.x=canvas.width; if(n.x>canvas.width)n.x=0;
+      if(n.y<0)n.y=canvas.height; if(n.y>canvas.height)n.y=0;
+      ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(0,212,255,${n.a})`; ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  resize();
+  for(let i=0;i<40;i++) nodes.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:.5+Math.random()*1.5,a:.04+Math.random()*.1});
+  draw();
+  window.addEventListener('resize',resize);
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.1});
+  document.querySelectorAll('[data-reveal]').forEach(el=>obs.observe(el));
+</script>
+
+{% endblock %}

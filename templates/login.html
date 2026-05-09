@@ -1,0 +1,158 @@
+{% extends "layout.html" %}
+
+{% block title %}LOGIN — FUSION II{% endblock %}
+
+{% block content %}
+
+<canvas id="pricing-bg"></canvas>
+
+<section class="auth-page">
+
+  <div class="auth-shell" data-reveal>
+
+    <!-- LEFT PANEL -->
+    <div class="auth-side">
+
+      <div class="auth-side__glow"></div>
+
+      <div class="auth-side__content">
+
+        <div class="eyebrow">
+          <span class="eyebrow-dot"></span>
+          ECHOFORGE ACCESS
+        </div>
+
+        <h1 class="auth-title">
+          ACCESS THE <span>CORE</span>
+        </h1>
+
+        <p class="auth-text">
+          Login to manage projects, deploy AI systems,
+          monitor EchoForge integrations and continue
+          building inside the FUSION II ecosystem.
+        </p>
+
+        <div class="auth-status">
+          <div class="auth-status__dot"></div>
+          SECURE NODE CONNECTED
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="auth-card">
+
+      <div class="auth-card__top">
+        <div>
+          <p class="auth-mini">SYSTEM LOGIN</p>
+          <h2>WELCOME BACK</h2>
+        </div>
+
+        <a href="/register" class="auth-link">
+          REGISTER →
+        </a>
+      </div>
+
+      <form action="/login" method="POST" class="auth-form">
+
+        <div class="auth-group">
+          <label>USERNAME</label>
+          <input
+            type="text"
+            name="username"
+            placeholder="ENTER USERNAME"
+            autocomplete="username"
+            required
+          >
+        </div>
+
+        <div class="auth-group">
+          <label>PASSWORD</label>
+          <input
+            type="password"
+            name="password"
+            placeholder="ENTER PASSWORD"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <button type="submit" class="auth-btn">
+          LOGIN TO SYSTEM <span>›</span>
+        </button>
+
+      </form>
+
+      <div class="auth-footer">
+        <span>NO ACCOUNT?</span>
+
+        <a href="/register" class="auth-link">
+          CREATE ACCOUNT
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<script>
+const canvas = document.getElementById('pricing-bg');
+
+if (canvas) {
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  const particles = Array.from({ length: 90 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 2,
+    dx: (Math.random() - 0.5) * 0.4,
+    dy: (Math.random() - 0.5) * 0.4
+  }));
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => {
+
+      p.x += p.dx;
+      p.y += p.dy;
+
+      if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+
+      const g = ctx.createRadialGradient(
+        p.x, p.y, 0,
+        p.x, p.y, p.r * 8
+      );
+
+      g.addColorStop(0, 'rgba(0,212,255,.9)');
+      g.addColorStop(.5, 'rgba(155,68,255,.25)');
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+
+      ctx.fillStyle = g;
+      ctx.fill();
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+}
+</script>
+
+{% endblock %}
