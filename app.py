@@ -282,3 +282,8 @@ def portfolio():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+@app.route("/debug")
+def debug():
+    import sys
+    return f"Python {sys.version} | DB: {os.environ.get('DATABASE_URL', 'NOT SET')[:30]}"
