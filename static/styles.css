@@ -1416,4 +1416,12 @@ body.hov .cursor-ring { width: 46px; height: 46px; border-color: var(--c); }
   .nav__links.open {
     display: flex;
   }
+
+  .section-heading {
+    font-size: clamp(1.6rem, 7vw, 2.5rem);
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
 }
+
