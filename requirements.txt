@@ -1,4 +1,4 @@
-flask
-flask-session
-werkzeug
-psycopg2-binary
+flask==3.0.3
+flask-session==0.8.0
+werkzeug==3.0.3
+psycopg2-binary==2.9.9
