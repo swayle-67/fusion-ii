@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.secret_key = os.environ["SECRET_KEY"]
 
 # ── ADMINS ──────────────────────────────────────────────────────────────────
-ADMINS = ["n0xy-dev", "swayle"]
+ADMINS = ["noxy-dev", "swayle"]
 # ────────────────────────────────────────────────────────────────────────────
 
 def get_db():
@@ -287,3 +287,28 @@ if __name__ == "__main__":
 def debug():
     import sys
     return f"Python {sys.version} | DB: {os.environ.get('DATABASE_URL', 'NOT SET')[:30]}"
+
+
+@app.route('/admin/clients')
+@login_required
+@admin_required
+def view_clients():
+    clients = db_execute("SELECT * FROM clients ORDER BY created_at DESC")
+    return render_template("clients.html", clients=clients)
+
+@app.route('/admin/clients/delete/<int:client_id>', methods=['POST'])
+@login_required
+@admin_required
+def delete_client(client_id):
+    db_execute("DELETE FROM clients WHERE id = ?", client_id)
+    flash("Client removed.", "info")
+    return redirect("/admin/clients")
+
+@app.route('/admin/clients/status/<int:client_id>', methods=['POST'])
+@login_required
+@admin_required
+def update_client_status(client_id):
+    status = request.form.get('status')
+    if status in ['new', 'contacted', 'closed']:
+        db_execute("UPDATE clients SET status = ? WHERE id = ?", status, client_id)
+    return redirect("/admin/clients")

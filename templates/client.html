@@ -1,0 +1,382 @@
+{% extends "base.html" %}
+{% block title %}CLIENTS — FUSION II{% endblock %}
+{% block content %}
+
+<section class="clients-page">
+
+  <div class="clients-header">
+    <div class="clients-header__left">
+      <div class="clients-header__tag">ADMIN // ECHOFORGE INTEL</div>
+      <h1 class="clients-header__title">CLIENT <span class="accent">LEADS</span></h1>
+      <p class="clients-header__sub">Prospects captured by EchoForge AI</p>
+    </div>
+    <div class="clients-header__stats">
+      <div class="stat-pill">
+        <span class="stat-pill__num">{{ clients | length }}</span>
+        <span class="stat-pill__label">TOTAL</span>
+      </div>
+      <div class="stat-pill stat-pill--new">
+        <span class="stat-pill__num">{{ clients | selectattr('status', 'equalto', 'new') | list | length }}</span>
+        <span class="stat-pill__label">NEW</span>
+      </div>
+      <div class="stat-pill stat-pill--contacted">
+        <span class="stat-pill__num">{{ clients | selectattr('status', 'equalto', 'contacted') | list | length }}</span>
+        <span class="stat-pill__label">CONTACTED</span>
+      </div>
+      <div class="stat-pill stat-pill--closed">
+        <span class="stat-pill__num">{{ clients | selectattr('status', 'equalto', 'closed') | list | length }}</span>
+        <span class="stat-pill__label">CLOSED</span>
+      </div>
+    </div>
+  </div>
+
+  {% if clients %}
+  <div class="clients-grid">
+    {% for client in clients %}
+    <div class="client-card status-{{ client.status }}">
+
+      <div class="client-card__header">
+        <div class="client-card__id">#{{ '%04d' % client.id }}</div>
+        <div class="client-card__badge badge--{{ client.status }}">
+          {% if client.status == 'new' %}● NEW
+          {% elif client.status == 'contacted' %}◆ CONTACTED
+          {% else %}✓ CLOSED{% endif %}
+        </div>
+      </div>
+
+      <div class="client-card__name">{{ client.name }}</div>
+
+      <div class="client-card__fields">
+        <div class="client-field">
+          <span class="client-field__icon">📞</span>
+          <div>
+            <div class="client-field__label">PHONE</div>
+            <a class="client-field__value client-field__value--link" href="tel:{{ client.phone }}">{{ client.phone }}</a>
+          </div>
+        </div>
+        <div class="client-field">
+          <span class="client-field__icon">🗓</span>
+          <div>
+            <div class="client-field__label">SLOT</div>
+            <div class="client-field__value">{{ client.slot }}</div>
+          </div>
+        </div>
+        {% if client.notes %}
+        <div class="client-field client-field--notes">
+          <span class="client-field__icon">📋</span>
+          <div>
+            <div class="client-field__label">PROJECT NOTES</div>
+            <div class="client-field__value">{{ client.notes }}</div>
+          </div>
+        </div>
+        {% endif %}
+        <div class="client-field">
+          <span class="client-field__icon">⏱</span>
+          <div>
+            <div class="client-field__label">CAPTURED</div>
+            <div class="client-field__value">{{ client.created_at.strftime('%d %b %Y · %H:%M') if client.created_at else '—' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="client-card__actions">
+        <form method="POST" action="/admin/clients/status/{{ client.id }}" class="status-form">
+          <select name="status" class="status-select" onchange="this.form.submit()">
+            <option value="new"       {% if client.status == 'new' %}selected{% endif %}>New</option>
+            <option value="contacted" {% if client.status == 'contacted' %}selected{% endif %}>Contacted</option>
+            <option value="closed"    {% if client.status == 'closed' %}selected{% endif %}>Closed</option>
+          </select>
+        </form>
+        <form method="POST" action="/admin/clients/delete/{{ client.id }}"
+              onsubmit="return confirm('Remove {{ client.name }}?')">
+          <button class="btn-delete" type="submit">DELETE</button>
+        </form>
+      </div>
+
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="clients-empty">
+    <div class="clients-empty__icon">◈</div>
+    <div class="clients-empty__title">NO LEADS YET</div>
+    <div class="clients-empty__sub">EchoForge hasn't captured any clients yet. Once a booking is confirmed through the chatbot it'll appear here.</div>
+  </div>
+  {% endif %}
+
+</section>
+
+<style>
+/* ── PAGE LAYOUT ─────────────────────────────────── */
+.clients-page {
+  min-height: 100vh;
+  padding: 120px 5vw 80px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ── HEADER ──────────────────────────────────────── */
+.clients-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 56px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid rgba(139,63,255,0.18);
+}
+.clients-header__tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: rgba(0,212,255,0.7);
+  margin-bottom: 12px;
+}
+.clients-header__title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  color: #e8e0ff;
+  letter-spacing: 2px;
+  line-height: 1;
+  margin: 0 0 8px;
+}
+.clients-header__title .accent { color: #00d4ff; }
+.clients-header__sub {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  color: rgba(200,184,255,0.55);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.clients-header__stats {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.stat-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 18px;
+  border: 1px solid rgba(139,63,255,0.25);
+  border-radius: 4px;
+  background: rgba(139,63,255,0.06);
+  min-width: 70px;
+}
+.stat-pill--new       { border-color: rgba(0,212,255,0.35); background: rgba(0,212,255,0.06); }
+.stat-pill--contacted { border-color: rgba(255,184,0,0.35);  background: rgba(255,184,0,0.06); }
+.stat-pill--closed    { border-color: rgba(0,255,136,0.35);  background: rgba(0,255,136,0.06); }
+.stat-pill__num {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #e8e0ff;
+  line-height: 1;
+}
+.stat-pill--new       .stat-pill__num { color: #00d4ff; }
+.stat-pill--contacted .stat-pill__num { color: #ffb800; }
+.stat-pill--closed    .stat-pill__num { color: #00ff88; }
+.stat-pill__label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(200,184,255,0.45);
+  margin-top: 4px;
+}
+
+/* ── GRID ────────────────────────────────────────── */
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+}
+
+/* ── CARD ────────────────────────────────────────── */
+.client-card {
+  background: rgba(15,10,35,0.85);
+  border: 1px solid rgba(139,63,255,0.2);
+  border-radius: 8px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.25s, transform 0.25s;
+}
+.client-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(139,63,255,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+.client-card:hover {
+  border-color: rgba(0,212,255,0.35);
+  transform: translateY(-2px);
+}
+.client-card.status-new       { border-left: 3px solid #00d4ff; }
+.client-card.status-contacted { border-left: 3px solid #ffb800; }
+.client-card.status-closed    { border-left: 3px solid #00ff88; }
+
+/* ── CARD HEADER ─────────────────────────────────── */
+.client-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.client-card__id {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: rgba(139,63,255,0.6);
+  letter-spacing: 2px;
+}
+.client-card__badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 4px 10px;
+  border-radius: 2px;
+}
+.badge--new       { color: #00d4ff; background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.25); }
+.badge--contacted { color: #ffb800; background: rgba(255,184,0,0.1); border: 1px solid rgba(255,184,0,0.25); }
+.badge--closed    { color: #00ff88; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.25); }
+
+/* ── CLIENT NAME ─────────────────────────────────── */
+.client-card__name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #e8e0ff;
+  letter-spacing: 1px;
+}
+
+/* ── FIELDS ──────────────────────────────────────── */
+.client-card__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.client-field {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.client-field__icon {
+  font-size: 14px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+.client-field__label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: rgba(0,212,255,0.55);
+  margin-bottom: 3px;
+}
+.client-field__value {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(232,224,255,0.85);
+  line-height: 1.4;
+}
+.client-field__value--link {
+  color: #00d4ff;
+  text-decoration: none;
+}
+.client-field__value--link:hover { text-decoration: underline; }
+.client-field--notes .client-field__value {
+  font-size: 13px;
+  color: rgba(200,184,255,0.65);
+  font-style: italic;
+}
+
+/* ── ACTIONS ─────────────────────────────────────── */
+.client-card__actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid rgba(139,63,255,0.12);
+  margin-top: auto;
+}
+.status-form { flex: 1; }
+.status-select {
+  width: 100%;
+  background: rgba(139,63,255,0.1);
+  border: 1px solid rgba(139,63,255,0.3);
+  color: #c8b8ff;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238b3fff'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+}
+.status-select:focus { outline: none; border-color: #00d4ff; }
+.btn-delete {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 8px 14px;
+  background: transparent;
+  border: 1px solid rgba(255,60,60,0.3);
+  color: rgba(255,100,100,0.7);
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.btn-delete:hover {
+  background: rgba(255,60,60,0.1);
+  border-color: rgba(255,60,60,0.7);
+  color: #ff6060;
+}
+
+/* ── EMPTY STATE ─────────────────────────────────── */
+.clients-empty {
+  text-align: center;
+  padding: 100px 20px;
+  border: 1px dashed rgba(139,63,255,0.2);
+  border-radius: 8px;
+}
+.clients-empty__icon {
+  font-size: 3rem;
+  color: rgba(139,63,255,0.3);
+  margin-bottom: 20px;
+}
+.clients-empty__title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.2rem;
+  color: rgba(200,184,255,0.4);
+  letter-spacing: 4px;
+  margin-bottom: 12px;
+}
+.clients-empty__sub {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px;
+  color: rgba(200,184,255,0.3);
+  max-width: 420px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────── */
+@media (max-width: 600px) {
+  .clients-header { flex-direction: column; align-items: flex-start; }
+  .clients-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+{% endblock %}
