@@ -75,9 +75,11 @@ def init_db():
     cur.close()
     conn.close()
 
-with app.app_context():
-    init_db()
-    print("DB initialised!")
+@app.before_request
+def setup():
+    if not getattr(app, '_db_ready', False):
+        init_db()
+        app._db_ready = True
 
 # ── DECORATORS ───────────────────────────────────────────────────────────────
 
