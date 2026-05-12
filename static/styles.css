@@ -1427,6 +1427,7 @@ body.hov .cursor-ring { width: 46px; height: 46px; border-color: var(--c); }
     font-size: .45rem;
     padding: 7px 12px;
     letter-spacing: .08em;
+    white-space: nowrap;
   }
 
 
