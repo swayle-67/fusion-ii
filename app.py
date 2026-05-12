@@ -1,10 +1,10 @@
 import os
-import sqlite3
+import psycopg2
+import psycopg2.extras
 from flask import Flask, render_template, redirect, request, session, flash, jsonify
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "fusion2_secret")
@@ -13,20 +13,21 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # ── ADMINS ──────────────────────────────────────────────────────────────────
-# Add usernames here to grant admin access
-# After registering an account, add the username to this list
 ADMINS = ["n0xy-dev", "swayle"]
 # ────────────────────────────────────────────────────────────────────────────
 
 def get_db():
-    conn = sqlite3.connect('fusion.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+    return psycopg2.connect(
+        os.environ["DATABASE_URL"],
+        cursor_factory=psycopg2.extras.RealDictCursor
+    )
 
 def db_execute(query, *args):
+    # Convert SQLite ? placeholders to PostgreSQL %s
+    query = query.replace("?", "%s")
     conn = get_db()
     cur = conn.cursor()
-    cur.execute(query, args)
+    cur.execute(query, args if args else None)
     conn.commit()
     try:
         results = [dict(row) for row in cur.fetchall()]
@@ -41,31 +42,33 @@ def init_db():
     cur = conn.cursor()
 
     cur.execute("""CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         username TEXT UNIQUE NOT NULL,
         email TEXT UNIQUE NOT NULL,
         hash TEXT NOT NULL)""")
 
     cur.execute("""CREATE TABLE IF NOT EXISTS portfolio (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         business_name TEXT NOT NULL,
         description TEXT NOT NULL,
         link TEXT NOT NULL,
         tier TEXT NOT NULL,
+        gif_url TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
 
     cur.execute("""CREATE TABLE IF NOT EXISTS ratings (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         user_id INTEGER NOT NULL,
         portfolio_id INTEGER,
-        company_rating INTEGER,
-        service_rating INTEGER,
-        project_rating INTEGER,
+        company_rating INTEGER CHECK (company_rating BETWEEN 1 AND 5),
+        service_rating INTEGER CHECK (service_rating BETWEEN 1 AND 5),
+        project_rating INTEGER CHECK (project_rating BETWEEN 1 AND 5),
         comment TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
 
     cur.execute("""CREATE TABLE IF NOT EXISTS bookings (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,
         phone TEXT NOT NULL,
         slot TEXT NOT NULL,
@@ -212,9 +215,9 @@ def ratings():
         LEFT JOIN portfolio ON portfolio.id = ratings.portfolio_id
         ORDER BY ratings.created_at DESC""")
     portfolio = db_execute("SELECT id, business_name FROM portfolio ORDER BY business_name")
-    avg = db_execute("""SELECT ROUND(AVG(company_rating),1) as avg_company,
-        ROUND(AVG(service_rating),1) as avg_service,
-        ROUND(AVG(project_rating),1) as avg_project FROM ratings""")
+    avg = db_execute("""SELECT ROUND(AVG(company_rating)::numeric,1) as avg_company,
+        ROUND(AVG(service_rating)::numeric,1) as avg_service,
+        ROUND(AVG(project_rating)::numeric,1) as avg_project FROM ratings""")
     return render_template("ratings.html", ratings=all_ratings, portfolio=portfolio,
                            averages=avg[0] if avg else {})
 
@@ -229,7 +232,7 @@ def add_rating():
     if not all([company_rating, service_rating, project_rating]):
         flash("Please provide all ratings.", "error")
         return redirect("/ratings")
-    existing = db_execute("SELECT id FROM ratings WHERE user_id = ? AND portfolio_id IS ?",
+    existing = db_execute("SELECT id FROM ratings WHERE user_id = ? AND portfolio_id IS NOT DISTINCT FROM ?",
                           session["user_id"], portfolio_id)
     if existing:
         flash("You've already rated this.", "error")
@@ -273,11 +276,11 @@ def delete_booking(booking_id):
     flash("Booking deleted.", "info")
     return redirect("/admin/bookings")
 
-if __name__ == "__main__":
-    app.run(debug=True)
-
 @app.route("/portfolio")
 def portfolio():
     projects = db_execute("SELECT * FROM portfolio ORDER BY created_at DESC")
     all_ratings = db_execute("SELECT * FROM ratings")
     return render_template("portfolio.html", portfolio=projects, ratings=all_ratings)
+
+if __name__ == "__main__":
+    app.run(debug=True)

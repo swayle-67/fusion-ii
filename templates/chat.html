@@ -352,15 +352,24 @@
 </section>
 
 <script>
-// Ambient neuron particles
 const WORKER_URL = 'https://proud-sound-4e50.fusionii-nexus.workers.dev';
 const CANNED = {
-  'what is fusion ii': 'FUSION II is...',
-  'pricing': 'Check our pricing page.',
-  'contact': 'Reach us at fusionii.nexus@gmail.com.com'
+  'what is fusion ii': 'FUSION II is a premium web design agency. EchoForge can help you book a consultation — want to get started?',
+  'pricing': 'Check our pricing page at /pricing, or chat with me to find the right package for your project.',
+  'contact': 'Reach us at fusionii.nexus@gmail.com, or let me book you in for a call right now.'
 };
+
+const MAX_HISTORY = 20; // trim oldest pairs beyond this
 let history = [];
+let isFetching = false;
+
 const nEl = document.getElementById('neurons');
+const form = document.getElementById('chatForm');
+const input = document.getElementById('chatInput');
+const win = document.getElementById('chatWindow');
+const typing = document.getElementById('typingIndicator');
+
+// ── NEURONS ───────────────────────────────────────────────────────────────────
 function spawnDot() {
   const d = document.createElement('div');
   d.className = 'n-dot';
@@ -374,7 +383,6 @@ function spawnDot() {
 for (let i = 0; i < 22; i++) spawnDot();
 setInterval(spawnDot, 600);
 
-// Typing burst — fires rapid neurons while bot is responding
 let burstInterval = null;
 function startBurst() {
   if (burstInterval) return;
@@ -383,9 +391,7 @@ function startBurst() {
       const d = document.createElement('div');
       d.className = 'n-dot burst';
       const a = Math.random() * Math.PI * 2;
-      const r1 = 15 + Math.random() * 35;
-      const r2 = 50 + Math.random() * 90;
-      const r3 = 90 + Math.random() * 130;
+      const r1 = 15 + Math.random() * 35, r2 = 50 + Math.random() * 90, r3 = 90 + Math.random() * 130;
       const dur = 0.8 + Math.random() * 1.2;
       d.style.cssText = `left:${50+Math.cos(a)*3}%;top:${50+Math.sin(a)*3}%;--dx1:${Math.cos(a)*r1}px;--dy1:${Math.sin(a)*r1}px;--dx2:${Math.cos(a)*r2}px;--dy2:${Math.sin(a)*r2}px;--dx3:${Math.cos(a)*r3}px;--dy3:${Math.sin(a)*r3}px;animation-duration:${dur}s;`;
       nEl.appendChild(d);
@@ -393,23 +399,15 @@ function startBurst() {
     }
   }, 80);
 }
-function stopBurst() {
-  clearInterval(burstInterval);
-  burstInterval = null;
-}
+function stopBurst() { clearInterval(burstInterval); burstInterval = null; }
 
-// Hide placeholder when video loads
-document.getElementById('echoVideo').addEventListener('canplay', function(){
+// ── VIDEO ─────────────────────────────────────────────────────────────────────
+document.getElementById('echoVideo').addEventListener('canplay', function() {
   document.getElementById('logoPlaceholder').style.display = 'none';
   this.style.opacity = 1;
 });
 
-// Chat
-const form = document.getElementById('chatForm');
-const input = document.getElementById('chatInput');
-const win = document.getElementById('chatWindow');
-const typing = document.getElementById('typingIndicator');
-
+// ── CHAT ──────────────────────────────────────────────────────────────────────
 function addMsg(text, role) {
   const m = document.createElement('div');
   m.className = `chat-msg ${role}`;
@@ -418,34 +416,88 @@ function addMsg(text, role) {
   win.scrollTop = win.scrollHeight;
 }
 
+function setInputLocked(locked) {
+  input.disabled = locked;
+  form.querySelector('button').disabled = locked;
+  if (locked) input.placeholder = 'EchoForge is responding...';
+  else { input.placeholder = 'Transmit your query...'; input.focus(); }
+}
+
+function endConversation() {
+  setInputLocked(true);
+  input.placeholder = 'Conversation complete. Refresh to start again.';
+}
+
 form.addEventListener('submit', async e => {
   e.preventDefault();
   const text = input.value.trim();
-  if (!text) return;
+  if (!text || isFetching) return;
 
   addMsg(text, 'user');
   input.value = '';
 
-  // canned check
+  // Canned check — still push to history so AI has context
   const key = Object.keys(CANNED).find(k => text.toLowerCase().includes(k));
-  if (key) { setTimeout(() => addMsg(CANNED[key], 'bot'), 400); return; }
+  if (key) {
+    history.push({ role: 'user', content: text });
+    const reply = CANNED[key];
+    setTimeout(() => {
+      addMsg(reply, 'bot');
+      history.push({ role: 'assistant', content: reply });
+    }, 400);
+    return;
+  }
 
-  // ai call
+  // AI call
   history.push({ role: 'user', content: text });
+
+  // Trim history to avoid huge payloads (keep last N messages)
+  if (history.length > MAX_HISTORY) history = history.slice(-MAX_HISTORY);
+
+  isFetching = true;
+  setInputLocked(true);
   typing.classList.add('active');
   startBurst();
   win.scrollTop = win.scrollHeight;
+
   try {
-    const res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ history }) });
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ history })
+    });
     const data = await res.json();
     typing.classList.remove('active');
     stopBurst();
-    history.push({ role: 'assistant', content: data.reply });
-    addMsg(data.reply || 'Signal lost. Reconnecting...', 'bot');
+
+    const reply = data.reply || 'Signal lost. Reconnecting...';
+    history.push({ role: 'assistant', content: reply });
+    addMsg(reply, 'bot');
+
+    if (data.bookingConfirmed) {
+      // Show a styled confirmation and lock input
+      const confirm = document.createElement('div');
+      confirm.className = 'chat-msg bot';
+      confirm.style.cssText = 'border-left-color:#3dffaa;background:rgba(61,255,170,.05);';
+      confirm.textContent = '✓ Booking received. The FUSION II team will be in touch to confirm.';
+      win.insertBefore(confirm, typing);
+      win.scrollTop = win.scrollHeight;
+      endConversation();
+      return;
+    }
+
+    if (data.limitReached) {
+      endConversation();
+      return;
+    }
+
   } catch {
     typing.classList.remove('active');
     stopBurst();
     addMsg('Connection disrupted. Please retry.', 'bot');
+  } finally {
+    isFetching = false;
+    if (!input.disabled) setInputLocked(false);
   }
 });
 </script>
