@@ -288,6 +288,20 @@ def debug():
     import sys
     return f"Python {sys.version} | DB: {os.environ.get('DATABASE_URL', 'NOT SET')[:30]}"
 
+@app.route('/api/client', methods=['POST'])
+def save_client():
+    data = request.get_json()
+    if not data:
+        return jsonify({'status': 'error', 'message': 'No data received'}), 400
+    db_execute(
+        "INSERT INTO clients (name, phone, slot, notes) VALUES (?, ?, ?, ?)",
+        data.get('name', ''),
+        data.get('phone', ''),
+        data.get('slot', ''),
+        data.get('notes', '')
+    )
+    return jsonify({'status': 'saved'})
+
 
 @app.route('/admin/clients')
 @login_required

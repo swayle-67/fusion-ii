@@ -69,7 +69,13 @@
     </ul>
 
     <div class="nav__right">
-      {% if session.get("username") %}
+      {% if session.get("username") in ADMINS %}
+      
+      <button class="nav__cta" onclick="window.location.href='/admin/clients'">
+        CLIENTS <span>›</span>">
+      </button>
+
+      {% elif session.get("username") %}
 
         <button class="nav__cta" onclick="window.location.href='/chat'">
           LET'S BUILD <span>›</span>
