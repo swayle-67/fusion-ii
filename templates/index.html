@@ -98,7 +98,7 @@
       <h2 class="section-heading" data-reveal>What is<br><span class="accent-text">EchoForge?</span></h2>
       <p class="about-body" data-reveal>EchoForge is the proprietary AI engine at the core of every Fusion II product. Built from first principles to handle the complexity of real business environments—not sandbox demos.</p>
       <p class="about-body" data-reveal>It listens, adapts, and evolves. Every interaction teaches it more about your domain. Every deployment makes it sharper.</p>
-      <a href="/chat" class="btn-primary" data-reveal>Learn More <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 6h10M7 2l4 4-4 4"/></svg></a>
+      <a href="{{ '/chat' if session.get('user_id') else '/login' }}" class="btn-primary" data-reveal>Learn More <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 6h10M7 2l4 4-4 4"/></svg></a>
     </div>
     <div class="about-visual" data-reveal>
       <div class="orb-wrap">
