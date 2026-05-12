@@ -68,6 +68,10 @@
       <li><a href="/#contact">CONTACT</a></li>
     </ul>
 
+    <button class="nav__hamburger" id="hamburger" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </button>
+
     <div class="nav__right">
       {% if session.get("username") %}
 
@@ -123,6 +127,10 @@
     });
   </script>
 
-  <script src="{{ url_for('static', filename='main.js') }}"></script>
+  <script src="{{ url_for('static', filename='main.js') }}">
+    function toggleNav() {
+    document.querySelector('.nav__links').classList.toggle('open');
+  }
+  </script>
 </body>
 </html>
