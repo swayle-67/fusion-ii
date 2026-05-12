@@ -2,15 +2,11 @@ import os
 import psycopg2
 import psycopg2.extras
 from flask import Flask, render_template, redirect, request, session, flash, jsonify
-from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "fusion2_secret")
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
+app.secret_key = os.environ["SECRET_KEY"]
 
 # ── ADMINS ──────────────────────────────────────────────────────────────────
 ADMINS = ["n0xy-dev", "swayle"]
