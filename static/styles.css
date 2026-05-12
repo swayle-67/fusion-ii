@@ -1392,7 +1392,6 @@ body.hov .cursor-ring { width: 46px; height: 46px; border-color: var(--c); }
 .chat-visual .orb-extra {
   animation: blob-c 11s ease-in-out infinite, orb-hue-3 8s ease-in-out infinite !important;
 }
-
 @media (max-width: 768px) {
   .hero-heading {
     font-size: clamp(1.8rem, 8vw, 3rem);
@@ -1400,12 +1399,13 @@ body.hov .cursor-ring { width: 46px; height: 46px; border-color: var(--c); }
     overflow-wrap: break-word;
   }
 
-  .nav__links.open {
-    display: flex;
+  .nav__links {
+    display: none;
     flex-direction: column;
     position: fixed;
     top: var(--nav-h);
-    left: 0; right: 0;
+    left: 0;
+    right: 0;
     background: rgba(2,4,8,.97);
     border-bottom: 1px solid rgba(0,212,255,.12);
     padding: 20px 24px;
@@ -1413,24 +1413,7 @@ body.hov .cursor-ring { width: 46px; height: 46px; border-color: var(--c); }
     z-index: 99;
   }
 
-  .nav__hamburger {
+  .nav__links.open {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
-    cursor: pointer;
-    padding: 4px;
-    background: none;
-    border: none;
   }
-
-  .nav__hamburger span {
-    display: block;
-    width: 22px;
-    height: 1.5px;
-    background: var(--c);
-  }
-}
-
-@media (min-width: 769px) {
-  .nav__hamburger { display: none; }
 }

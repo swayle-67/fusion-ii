@@ -16,7 +16,7 @@
 
   <nav class="nav" id="nav">
     <div class="nav__brand">
-      <a href="/" class="nav__logo-svg">
+      <a href="/" class="nav__logo-svg" id="nav-logo">
         <svg width="190" height="38" viewBox="0 0 340 80">
           <defs>
             <linearGradient id="gfw" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -67,10 +67,6 @@
       <li><a href="/portfolio" class="{{ 'active' if request.path == '/portfolio' }}">PORTFOLIO</a></li>
       <li><a href="/#contact">CONTACT</a></li>
     </ul>
-
-    <button class="nav__hamburger" id="hamburger" onclick="toggleNav()">
-      <span></span><span></span><span></span>
-    </button>
 
     <div class="nav__right">
       {% if session.get("username") %}
@@ -127,10 +123,18 @@
     });
   </script>
 
-  <script src="{{ url_for('static', filename='main.js') }}">
+  <script src="{{ url_for('static', filename='main.js') }}"></script>
+  <script>
     function toggleNav() {
-    document.querySelector('.nav__links').classList.toggle('open');
-  }
+      document.querySelector('.nav__links').classList.toggle('open');
+    }
+
+    document.getElementById('nav-logo').addEventListener('click', function(e) {
+      if (window.innerWidth <= 768) {
+        e.preventDefault();
+        toggleNav();
+      }
+    });
   </script>
 </body>
 </html>
