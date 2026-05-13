@@ -419,8 +419,9 @@ function addMsg(text, role) {
 function setInputLocked(locked) {
   input.disabled = locked;
   form.querySelector('button').disabled = locked;
-  if (locked) input.placeholder = 'EchoForge is responding...';
-  else { input.placeholder = 'Transmit your query...'; input.focus(); }
+  if (locked) {input.placeholder = 'EchoForge is responding...';}
+  else { input.placeholder = 'Transmit your query...'; input.focus(); 
+  if (window.innerWidth > 860) input.focus();}
 }
 
 function endConversation() {
