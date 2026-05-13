@@ -63,13 +63,16 @@ def init_db():
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
 
-    cur.execute("""CREATE TABLE IF NOT EXISTS bookings (
+    cur.execute("""CREATE TABLE IF NOT EXISTS clients (
         id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,
         phone TEXT NOT NULL,
         slot TEXT NOT NULL,
         notes TEXT,
-        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
+        status TEXT DEFAULT 'new',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
+    
+
 
     conn.commit()
     cur.close()
@@ -253,9 +256,6 @@ def portfolio():
     all_ratings = db_execute("SELECT * FROM ratings")
     return render_template("portfolio.html", portfolio=projects, ratings=all_ratings)
 
-if __name__ == "__main__":
-    app.run(debug=True)
-
 @app.route("/debug")
 def debug():
     import sys
@@ -299,3 +299,7 @@ def update_client_status(client_id):
     if status in ['new', 'contacted', 'closed']:
         db_execute("UPDATE clients SET status = ? WHERE id = ?", status, client_id)
     return redirect("/admin/clients")
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
