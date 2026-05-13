@@ -243,36 +243,9 @@ def add_rating():
     flash("Rating submitted!", "success")
     return redirect("/ratings")
 
-# ── BOOKINGS ──────────────────────────────────────────────────────────────────
 
-@app.route('/api/booking', methods=['POST'])
-def save_booking():
-    data = request.get_json()
-    if not data:
-        return jsonify({'status': 'error', 'message': 'No data received'}), 400
-    db_execute(
-        "INSERT INTO bookings (name, phone, slot, notes) VALUES (?, ?, ?, ?)",
-        data.get('name', ''),
-        data.get('phone', ''),
-        data.get('slot', ''),
-        data.get('notes', '')
-    )
-    return jsonify({'status': 'saved'})
 
-@app.route('/admin/bookings')
-@login_required
-@admin_required
-def view_bookings():
-    bookings = db_execute("SELECT * FROM bookings ORDER BY timestamp DESC")
-    return render_template("bookings.html", bookings=bookings)
 
-@app.route('/admin/bookings/delete/<int:booking_id>', methods=['POST'])
-@login_required
-@admin_required
-def delete_booking(booking_id):
-    db_execute("DELETE FROM bookings WHERE id = ?", booking_id)
-    flash("Booking deleted.", "info")
-    return redirect("/admin/bookings")
 
 @app.route("/portfolio")
 def portfolio():
