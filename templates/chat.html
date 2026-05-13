@@ -496,9 +496,12 @@ form.addEventListener('submit', async e => {
     typing.classList.remove('active');
     stopBurst();
     addMsg('Connection disrupted. Please retry.', 'bot');
-  } finally {
+  } 
+  finally {
     isFetching = false;
-    if (!input.disabled) setInputLocked(false);
+    if (input.placeholder !== 'Conversation complete. Refresh to start again.') {
+      setInputLocked(false);
+    }
   }
 });
 </script>
