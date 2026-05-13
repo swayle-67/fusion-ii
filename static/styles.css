@@ -1433,3 +1433,9 @@ body.hov .cursor-ring { width: 46px; height: 46px; border-color: var(--c); }
 
 }
 
+.p-price .p-sym:first-child {
+  font-size: 0.45em;
+  align-self: center;
+  margin-right: 4px;
+}
+
