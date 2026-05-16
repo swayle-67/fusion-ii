@@ -3,7 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}FUSION II — EchoForge{% endblock %}</title>
+
+  <!-- ── PRIMARY META ─────────────────────────────────────────────────────── -->
+  <title>{% block title %}AI Infrastructure & Custom LLM Solutions | Fusion II{% endblock %}</title>
+  <meta name="description" content="{% block description %}Fusion II builds AI infrastructure, intelligent automation, and custom LLM solutions powered by EchoForge — for businesses ready to scale.{% endblock %}" />
+  <meta name="keywords" content="{% block keywords %}AI infrastructure, custom LLM, intelligent automation, machine learning, EchoForge, AI solutions South Africa{% endblock %}" />
+  <meta name="author" content="Fusion II" />
+  <meta name="robots" content="{% block robots %}index, follow{% endblock %}" />
+  <link rel="canonical" href="{% block canonical %}https://fusion-ii.vercel.app/{% endblock %}" />
+
+  <!-- ── OPEN GRAPH (Facebook, WhatsApp, LinkedIn) ─────────────────────────── -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Fusion II" />
+  <meta property="og:title" content="{% block og_title %}AI Infrastructure & Custom LLM Solutions | Fusion II{% endblock %}" />
+  <meta property="og:description" content="{% block og_description %}Fusion II builds AI infrastructure, intelligent automation, and custom LLM solutions powered by EchoForge — for businesses ready to scale.{% endblock %}" />
+  <meta property="og:url" content="{% block og_url %}https://fusion-ii.vercel.app/{% endblock %}" />
+  <meta property="og:image" content="{% block og_image %}https://fusion-ii.vercel.app/static/og-image.jpg{% endblock %}" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="en_ZA" />
+
+  <!-- ── TWITTER / X CARD ──────────────────────────────────────────────────── -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{% block twitter_title %}AI Infrastructure & Custom LLM Solutions | Fusion II{% endblock %}" />
+  <meta name="twitter:description" content="{% block twitter_description %}Fusion II builds AI infrastructure, intelligent automation, and custom LLM solutions powered by EchoForge.{% endblock %}" />
+  <meta name="twitter:image" content="{% block twitter_image %}https://fusion-ii.vercel.app/static/og-image.jpg{% endblock %}" />
+
+  <!-- ── SCHEMA.ORG STRUCTURED DATA ───────────────────────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Fusion II",
+    "url": "https://fusion-ii.vercel.app",
+    "logo": "https://fusion-ii.vercel.app/static/og-image.jpg",
+    "description": "Fusion II builds AI infrastructure, intelligent automation, and custom LLM solutions powered by EchoForge.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Durban",
+      "addressRegion": "KwaZulu-Natal",
+      "addressCountry": "ZA"
+    },
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "telephone": "+27-81-377-9669",
+        "contactType": "customer service",
+        "availableLanguage": "English"
+      },
+      {
+        "@type": "ContactPoint",
+        "telephone": "+27-72-414-3591",
+        "contactType": "customer service",
+        "availableLanguage": "English"
+      }
+    ],
+    "sameAs": [
+      "https://instagram.com/fusion_ii_"
+    ]
+  }
+  </script>
+
+  <!-- ── FONTS & STYLES ─────────────────────────────────────────────────────── -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">

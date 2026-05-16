@@ -1,7 +1,7 @@
 import os
 import psycopg2
 import psycopg2.extras
-from flask import Flask, render_template, redirect, request, session, flash, jsonify
+from flask import Flask, render_template, redirect, request, session, flash, jsonify, send_from_directory
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 
@@ -19,7 +19,6 @@ def get_db():
     )
 
 def db_execute(query, *args):
-    # Convert SQLite ? placeholders to PostgreSQL %s
     query = query.replace("?", "%s")
     conn = get_db()
     cur = conn.cursor()
@@ -71,8 +70,6 @@ def init_db():
         notes TEXT,
         status TEXT DEFAULT 'new',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
-    
-
 
     conn.commit()
     cur.close()
@@ -118,9 +115,6 @@ def index():
 def pricing():
     return render_template("pricing.html")
 
-@app.route("/about")
-def about():
-    return render_template("about.html")
 
 @app.route("/chat")
 def chat():
@@ -246,20 +240,22 @@ def add_rating():
     flash("Rating submitted!", "success")
     return redirect("/ratings")
 
-
-
-
-
 @app.route("/portfolio")
 def portfolio():
     projects = db_execute("SELECT * FROM portfolio ORDER BY created_at DESC")
     all_ratings = db_execute("SELECT * FROM ratings")
     return render_template("portfolio.html", portfolio=projects, ratings=all_ratings)
 
+# ── DEBUG (admin only) ────────────────────────────────────────────────────────
+
 @app.route("/debug")
+@login_required
+@admin_required
 def debug():
     import sys
     return f"Python {sys.version} | DB: {os.environ.get('DATABASE_URL', 'NOT SET')[:30]}"
+
+# ── API ───────────────────────────────────────────────────────────────────────
 
 @app.route('/api/client', methods=['POST'])
 def save_client():
@@ -275,6 +271,7 @@ def save_client():
     )
     return jsonify({'status': 'saved'})
 
+# ── ADMIN ─────────────────────────────────────────────────────────────────────
 
 @app.route('/admin/clients')
 @login_required
@@ -300,6 +297,17 @@ def update_client_status(client_id):
         db_execute("UPDATE clients SET status = ? WHERE id = ?", status, client_id)
     return redirect("/admin/clients")
 
+# ── SEO ───────────────────────────────────────────────────────────────────────
+
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_from_directory('public', 'sitemap.xml')
+
+@app.route('/robots.txt')
+def robots():
+    return send_from_directory('public', 'robots.txt')
+
+# ─────────────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     app.run(debug=True)
