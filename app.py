@@ -301,11 +301,11 @@ def update_client_status(client_id):
 
 @app.route('/sitemap.xml')
 def sitemap():
-    return send_from_directory('public', 'sitemap.xml')
+    return send_from_directory('public', 'sitemap.xml', mimetype='application/xml')
 
 @app.route('/robots.txt')
 def robots():
-    return send_from_directory('public', 'robots.txt')
+    return send_from_directory('public', 'robots.txt', mimetype='text/plain')
 
 # ─────────────────────────────────────────────────────────────────────────────
 
