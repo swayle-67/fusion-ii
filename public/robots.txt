@@ -1,0 +1,9 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Exclude secured administrative pathways
+Disallow: /admin
+Disallow: /api/
+
+Sitemap: https://fusion-ii.vercel.app/sitemap.xml

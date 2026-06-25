@@ -1,0 +1,12 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+server_data/
+flask_session/
+fusion.db
+requirements.txt
+*.cjs
+.env

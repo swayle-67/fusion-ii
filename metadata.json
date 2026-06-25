@@ -1,0 +1,6 @@
+{
+  "name": "Fusion II Web AI and Design",
+  "description": "Premium design and AI integrations agency website featuring a custom Velvet Noise ambient background.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
