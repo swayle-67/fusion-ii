@@ -9,7 +9,7 @@ import {
   Layers,
   Send
 } from "lucide-react";
-import blackHoleLogo from "../assets/images/exact_blackhole_widescreen_1781967539833.jpg";
+import blackHoleLogo from "../public/og-image.jpg"
 import CookieSettingsTrigger from "./CookieSettingsTrigger";
 
 
