@@ -36,44 +36,7 @@ export const SERVICES_DATA: Service[] = [
   },
 ];
 
-export const CASE_STUDIES_DATA: CaseStudy[] = [
-  {
-    id: "aether-volume",
-    title: "Aether Volume",
-    category: "Interactive Synths / Web Audio",
-    client: "Aether Sound Labs",
-    year: "2025",
-    summary: "A real-time 3D volumetric sound field synthesizer rendering acoustic resonance vectors natively on web pages.",
-    description: "Aether Sound Labs contacted us to build a web-facing workspace for spatial audio artists. We designed an interactive, low-latency AudioContext pipeline paired with an optimized WebGL particle mesh. The interface models 360-degree acoustics and uses cognitive embeddings to auto-classify sound textures. It is complete with customizable tactile parameter boards that simulate physical hardware knobs.",
-    tech: ["Web Audio API", "WebGL Particles", "Tailwind CSS", "Antigravity Node"],
-    role: "Lead Creative Engineering & Interface Architecture",
-    projectUrl: "https://github.com"
-  },
-  {
-    id: "loom-cognitive",
-    title: "Loom Cognitive",
-    category: "AI Integration / Enterprise Portal",
-    client: "Loom Fashion Corp",
-    year: "2026",
-    summary: "A unified prediction engine & design pipeline mapping fashion trends via fine-tuned model agents.",
-    description: "We collaborated with Loom Fashion Corp to revolutionize their internal planning systems. We built a fast, fluid visual intelligence platform that allows designers to feed moodboards, textual notes, and historical sale datasets into pre-tuned vision agents. The system generates high-end structured mood projections and renders custom pattern overlays instantly via standard SVG nodes, reducing production-cycle latency by 45%.",
-    tech: ["React 19", "Vite ESM", "Vector Semantic Indexing", "Express Node.js"],
-    role: "Full-Stack System Design & AI Proxy Engineering",
-    projectUrl: "https://ai.google"
-  },
-  {
-    id: "soma-procedural",
-    title: "Soma Studio",
-    category: "Procedural Branding / Responsive Identity",
-    client: "Soma Architectural Design",
-    year: "2024",
-    summary: "A programmatic, living brand identity that reshapes itself based on real-time wind and sun angle data.",
-    description: "Soma wanted a branding concept that reflected their commitment to responsive physical environmental architecture. We developed an elegant, mathematical visual identity where the primary asset—a fluid vector glyph—deforms and adapts on their website in real time using client-side wind data and current astronomical sun tracks. The result is a living catalog that never looks identical twice, yet remains deeply cohesive and iconic.",
-    tech: ["SVG Mathematics", "HTML5 Canvas", "OpenWeather API Map", "Vite"],
-    role: "Mathematical Asset Generation & Typography Pairing",
-    projectUrl: "https://www.google.com"
-  },
-];
+export const CASE_STUDIES_DATA: CaseStudy[] = [];
 
 export const PHILOSOPHY_SECTIONS = [
   {

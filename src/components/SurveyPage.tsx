@@ -17,29 +17,23 @@ interface Message {
 export default function SurveyPage() {
   const [currentMode, setCurrentMode] = useState<"select" | "survey" | "ai">("select");
   
-  // States for 5-step Project Discovery Form
   const [step, setStep] = useState(1);
   
-  // Step 1: Business Information
   const [q1_businessAbout, setQ1_businessAbout] = useState("");
   const [q2_achievements, setQ2_achievements] = useState<string[]>([]);
   const [q2_achievementsOther, setQ2_achievementsOther] = useState("");
 
-  // Step 2: Website Development
   const [q3_webInterest, setQ3_webInterest] = useState("");
   const [q4_webPackages, setQ4_webPackages] = useState<string[]>([]);
   const [q5_webPagesFeatures, setQ5_webPagesFeatures] = useState("");
 
-  // Step 3: AI Development
   const [q6_aiInterest, setQ6_aiInterest] = useState("");
   const [q7_aiSolutions, setQ7_aiSolutions] = useState<string[]>([]);
   const [q8_aiTasks, setQ8_aiTasks] = useState("");
 
-  // Step 4: Design & UX
   const [q9_lookAndFeel, setQ9_lookAndFeel] = useState("");
   const [q10_inspirations, setQ10_inspirations] = useState("");
 
-  // Step 5: Final Project Details & Contact Info
   const [timeline, setTimeline] = useState("");
   const [budget, setBudget] = useState("");
   const [contactName, setContactName] = useState("");
@@ -51,7 +45,6 @@ export default function SurveyPage() {
   const [ticketId, setTicketId] = useState("");
   const [copied, setCopied] = useState(false);
 
-  // States for Chatbot with AI
   const [userInput, setUserInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -62,15 +55,17 @@ export default function SurveyPage() {
     }
   ]);
 
-  const chatEndRef = useRef<HTMLDivElement>(null);
+  // Use a ref on the chat container div instead of scrollIntoView on a dummy element
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to bottom of chat
+  // Scroll only the chat box — not the whole page
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
   }, [messages, isTyping]);
 
   const handleNextStep = () => {
-    // Basic step validation
     if (step === 1 && !q1_businessAbout.trim()) return;
     if (step === 5) {
       if (!timeline || !budget || !contactName.trim() || !contactEmail.trim() || !contactPhone.trim()) return;
@@ -122,9 +117,7 @@ export default function SurveyPage() {
       budget
     };
 
-    // Save using dynamic central store
     saveSurveyResponse(newResponse);
-
     setTicketId(generatedTicket);
     setSubmitted(true);
   };
@@ -158,7 +151,6 @@ export default function SurveyPage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Chat AI Logic
   const handleSendMessage = (e?: React.FormEvent, customText?: string) => {
     if (e) e.preventDefault();
     const query = customText || userInput;
@@ -194,7 +186,6 @@ export default function SurveyPage() {
           systemLayout
         }]);
 
-        // Save AI Chat interaction in central dynamic store
         saveAIInteraction({
           id: "AIC-" + Math.floor(Math.random() * 1000000),
           timestamp: new Date().toLocaleDateString("en-ZA", {
@@ -213,7 +204,7 @@ export default function SurveyPage() {
         console.error("AI Generation error:", err);
         setMessages(prev => [...prev, {
           sender: "bot",
-          text: "System response: Failed to establish secure connection channels with the FUSION_II_ARCHITECT core. Please review GROK_API_KEY environment flags.",
+          text: "Failed to connect to the AI service. Please try again.",
           timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
         }]);
       })
@@ -232,7 +223,6 @@ export default function SurveyPage() {
   return (
     <div className="max-w-5xl mx-auto space-y-10 py-6 animate-fade-in" id="portal-root">
       
-      {/* Title & Introduction */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-white/[0.05] pb-6 gap-4">
         <div className="border-l-2 border-[#00cbd6]/40 pl-6 space-y-1">
           <span className="font-mono text-[9px] text-[#00cbd6] tracking-widest uppercase block">
@@ -258,7 +248,6 @@ export default function SurveyPage() {
       </div>
 
       <AnimatePresence mode="wait">
-        {/* MODE SELECTOR PANEL */}
         {currentMode === "select" && (
           <motion.div
             key="selection-panel"
@@ -268,7 +257,6 @@ export default function SurveyPage() {
             transition={{ duration: 0.3 }}
             className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4"
           >
-            {/* Survey Card */}
             <div 
               onClick={() => {
                 resetSurvey();
@@ -299,7 +287,6 @@ export default function SurveyPage() {
               </div>
             </div>
 
-            {/* AI Builder Card */}
             <div 
               onClick={() => setCurrentMode("ai")}
               className="group p-8 rounded-2xl border border-white/[0.04] bg-[#090909]/60 backdrop-blur-md hover:bg-white/[0.01] hover:border-purple-500/20 transition-all duration-300 relative overflow-hidden cursor-pointer flex flex-col justify-between h-[280px]"
@@ -329,7 +316,6 @@ export default function SurveyPage() {
           </motion.div>
         )}
 
-        {/* 5-STEP DISCOVERY SURVEY MODE */}
         {currentMode === "survey" && (
           <motion.div
             key="survey-mode-panel"
@@ -339,7 +325,6 @@ export default function SurveyPage() {
             transition={{ duration: 0.3 }}
             className="max-w-4xl mx-auto w-full items-start"
           >
-            {/* Progress and main form box */}
             <div className="w-full bg-[#090909]/60 backdrop-blur-md rounded-2xl border border-white/[0.04] p-6 sm:p-8 relative overflow-hidden" id="survey-questionnaire-box">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#00cbd6]/[0.01] rounded-full blur-3xl pointer-events-none" />
 
@@ -363,7 +348,6 @@ export default function SurveyPage() {
                     transition={{ duration: 0.25 }}
                     className="space-y-6"
                   >
-                    {/* Horizontal progression steps indicator */}
                     <div className="flex flex-col gap-2 pb-4 border-b border-white/[0.05]">
                       <div className="flex items-center justify-between">
                         <span className="font-mono text-[9px] text-[#00cbd6] tracking-widest uppercase">
@@ -388,7 +372,6 @@ export default function SurveyPage() {
                       </div>
                     </div>
 
-                    {/* Step specific templates */}
                     {step === 1 && (
                       <div className="space-y-6">
                         <div className="flex items-center gap-2 border-b border-white/[0.03] pb-2">
@@ -396,7 +379,6 @@ export default function SurveyPage() {
                           <span className="font-mono text-xs uppercase text-white tracking-widest font-semibold">Business Information</span>
                         </div>
 
-                        {/* Q1 */}
                         <div className="space-y-2">
                           <label className="block text-xs font-semibold text-white/95">
                             1. Tell us about your business <span className="text-[#00cbd6]">*</span>
@@ -413,7 +395,6 @@ export default function SurveyPage() {
                           />
                         </div>
 
-                        {/* Q2 */}
                         <div className="space-y-3 pt-2">
                           <label className="block text-xs font-semibold text-white/95">
                             2. What are you looking to achieve with this project?
@@ -474,7 +455,6 @@ export default function SurveyPage() {
                           <span className="font-mono text-xs uppercase text-white tracking-widest font-semibold">Website Development</span>
                         </div>
 
-                        {/* Q3 */}
                         <div className="space-y-3">
                           <label className="block text-xs font-semibold text-white/95">
                             3. Are you interested in a website development package?
@@ -501,7 +481,6 @@ export default function SurveyPage() {
                           </div>
                         </div>
 
-                        {/* Q4 */}
                         {q3_webInterest !== "No" && (
                           <div className="space-y-3 pt-2">
                             <label className="block text-xs font-semibold text-white/95">
@@ -511,85 +490,41 @@ export default function SurveyPage() {
                               Select any website tier you wish to explore (No pricing included).
                             </p>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                              {/* Starter */}
-                              <div
-                                onClick={() => toggleSelect(q4_webPackages, setQ4_webPackages, "Starter Website")}
-                                className={`p-4 rounded-xl border transition-all cursor-pointer text-left flex flex-col justify-between h-full ${
-                                  q4_webPackages.includes("Starter Website")
-                                    ? "bg-[#00cbd6]/[0.05] border-[#00cbd6]/30 text-white"
-                                    : "bg-white/[0.01] border-white/[0.05] text-white/60 hover:bg-white/[0.02]"
-                                }`}
-                              >
-                                <div className="space-y-1.5">
-                                  <span className="text-xs font-bold text-white block">Starter Website</span>
-                                  <ul className="text-[9px] text-[#8e8e89] space-y-1 list-disc pl-3">
-                                    <li>Professional online presence</li>
-                                    <li>Basic business info</li>
-                                    <li>Contact functionality</li>
-                                  </ul>
-                                </div>
-                                <div className="mt-4 pt-2 border-t border-white/[0.03] flex items-center justify-between text-[10px] font-mono">
-                                  <span>INTERESTED</span>
-                                  <div className={`w-3.5 h-3.5 rounded border ${
-                                    q4_webPackages.includes("Starter Website") ? "border-[#00cbd6] bg-[#00cbd6]" : "border-white/20"
-                                  }`} />
-                                </div>
-                              </div>
-
-                              {/* Business */}
-                              <div
-                                onClick={() => toggleSelect(q4_webPackages, setQ4_webPackages, "Business Website")}
-                                className={`p-4 rounded-xl border transition-all cursor-pointer text-left flex flex-col justify-between h-full ${
-                                  q4_webPackages.includes("Business Website")
-                                    ? "bg-[#00cbd6]/[0.05] border-[#00cbd6]/30 text-white"
-                                    : "bg-white/[0.01] border-white/[0.05] text-white/60 hover:bg-white/[0.02]"
-                                }`}
-                              >
-                                <div className="space-y-1.5">
-                                  <span className="text-xs font-bold text-white block">Business Website</span>
-                                  <ul className="text-[9px] text-[#8e8e89] space-y-1 list-disc pl-3">
-                                    <li>More advanced pages</li>
-                                    <li>Custom responsive design</li>
-                                    <li>Better interaction & leads</li>
-                                  </ul>
-                                </div>
-                                <div className="mt-4 pt-2 border-t border-white/[0.03] flex items-center justify-between text-[10px] font-mono">
-                                  <span>INTERESTED</span>
-                                  <div className={`w-3.5 h-3.5 rounded border ${
-                                    q4_webPackages.includes("Business Website") ? "border-[#00cbd6] bg-[#00cbd6]" : "border-white/20"
-                                  }`} />
-                                </div>
-                              </div>
-
-                              {/* Premium */}
-                              <div
-                                onClick={() => toggleSelect(q4_webPackages, setQ4_webPackages, "Premium Website")}
-                                className={`p-4 rounded-xl border transition-all cursor-pointer text-left flex flex-col justify-between h-full ${
-                                  q4_webPackages.includes("Premium Website")
-                                    ? "bg-[#00cbd6]/[0.05] border-[#00cbd6]/30 text-white"
-                                    : "bg-white/[0.01] border-white/[0.05] text-white/60 hover:bg-white/[0.02]"
-                                }`}
-                              >
-                                <div className="space-y-1.5">
-                                  <span className="text-xs font-bold text-white block">Premium Website</span>
-                                  <ul className="text-[9px] text-[#8e8e89] space-y-1 list-disc pl-3">
-                                    <li>Advanced functionality</li>
-                                    <li>Custom integrations</li>
-                                    <li>High-end user experience</li>
-                                  </ul>
-                                </div>
-                                <div className="mt-4 pt-2 border-t border-white/[0.03] flex items-center justify-between text-[10px] font-mono">
-                                  <span>INTERESTED</span>
-                                  <div className={`w-3.5 h-3.5 rounded border ${
-                                    q4_webPackages.includes("Premium Website") ? "border-[#00cbd6] bg-[#00cbd6]" : "border-white/20"
-                                  }`} />
-                                </div>
-                              </div>
+                              {["Starter Website", "Business Website", "Premium Website"].map((pkg) => {
+                                const desc: Record<string, string[]> = {
+                                  "Starter Website": ["Professional online presence", "Basic business info", "Contact functionality"],
+                                  "Business Website": ["More advanced pages", "Custom responsive design", "Better interaction & leads"],
+                                  "Premium Website": ["Advanced functionality", "Custom integrations", "High-end user experience"],
+                                };
+                                return (
+                                  <div
+                                    key={pkg}
+                                    onClick={() => toggleSelect(q4_webPackages, setQ4_webPackages, pkg)}
+                                    className={`p-4 rounded-xl border transition-all cursor-pointer text-left flex flex-col justify-between h-full ${
+                                      q4_webPackages.includes(pkg)
+                                        ? "bg-[#00cbd6]/[0.05] border-[#00cbd6]/30 text-white"
+                                        : "bg-white/[0.01] border-white/[0.05] text-white/60 hover:bg-white/[0.02]"
+                                    }`}
+                                  >
+                                    <div className="space-y-1.5">
+                                      <span className="text-xs font-bold text-white block">{pkg}</span>
+                                      <ul className="text-[9px] text-[#8e8e89] space-y-1 list-disc pl-3">
+                                        {desc[pkg].map((d) => <li key={d}>{d}</li>)}
+                                      </ul>
+                                    </div>
+                                    <div className="mt-4 pt-2 border-t border-white/[0.03] flex items-center justify-between text-[10px] font-mono">
+                                      <span>INTERESTED</span>
+                                      <div className={`w-3.5 h-3.5 rounded border ${
+                                        q4_webPackages.includes(pkg) ? "border-[#00cbd6] bg-[#00cbd6]" : "border-white/20"
+                                      }`} />
+                                    </div>
+                                  </div>
+                                );
+                              })}
                             </div>
                           </div>
                         )}
 
-                        {/* Q5 */}
                         <div className="space-y-2 pt-2">
                           <label className="block text-xs font-semibold text-white/95">
                             5. What pages or features would you like included on your website?
@@ -615,7 +550,6 @@ export default function SurveyPage() {
                           <span className="font-mono text-xs uppercase text-white tracking-widest font-semibold">AI Development</span>
                         </div>
 
-                        {/* Q6 */}
                         <div className="space-y-3">
                           <label className="block text-xs font-semibold text-white/95">
                             6. Are you interested in implementing AI into your business?
@@ -642,7 +576,6 @@ export default function SurveyPage() {
                           </div>
                         </div>
 
-                        {/* Q7 */}
                         {q6_aiInterest !== "No" && (
                           <div className="space-y-3 pt-2">
                             <label className="block text-xs font-semibold text-white/95">
@@ -652,85 +585,38 @@ export default function SurveyPage() {
                               Select any AI model system you would like us to diagram.
                             </p>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                              {/* AI Assistant */}
-                              <div
-                                onClick={() => toggleSelect(q7_aiSolutions, setQ7_aiSolutions, "AI Assistant")}
-                                className={`p-4 rounded-xl border transition-all cursor-pointer text-left flex flex-col justify-between h-full ${
-                                  q7_aiSolutions.includes("AI Assistant")
-                                    ? "bg-[#00cbd6]/[0.05] border-[#00cbd6]/30 text-white"
-                                    : "bg-white/[0.01] border-white/[0.05] text-white/60 hover:bg-white/[0.02]"
-                                }`}
-                              >
-                                <div className="space-y-1.5">
-                                  <span className="text-xs font-bold text-white block">AI Assistant</span>
-                                  <ul className="text-[9px] text-[#8e8e89] space-y-1 list-disc pl-3 font-sans">
-                                    <li>Customer enquiries</li>
-                                    <li>Intelligent FAQs</li>
-                                    <li>Basic layout support</li>
-                                  </ul>
+                              {[
+                                { name: "AI Assistant", items: ["Customer enquiries", "Intelligent FAQs", "Basic layout support"] },
+                                { name: "AI Business Agent", items: ["Lead qualification", "Automatic follow-ups", "Automated workflows"] },
+                                { name: "Custom AI System", items: ["Advanced integrations", "Business-specific automation", "Custom system pipelines"] },
+                              ].map(({ name, items }) => (
+                                <div
+                                  key={name}
+                                  onClick={() => toggleSelect(q7_aiSolutions, setQ7_aiSolutions, name)}
+                                  className={`p-4 rounded-xl border transition-all cursor-pointer text-left flex flex-col justify-between h-full ${
+                                    q7_aiSolutions.includes(name)
+                                      ? "bg-[#00cbd6]/[0.05] border-[#00cbd6]/30 text-white"
+                                      : "bg-white/[0.01] border-white/[0.05] text-white/60 hover:bg-white/[0.02]"
+                                  }`}
+                                >
+                                  <div className="space-y-1.5">
+                                    <span className="text-xs font-bold text-white block">{name}</span>
+                                    <ul className="text-[9px] text-[#8e8e89] space-y-1 list-disc pl-3 font-sans">
+                                      {items.map((i) => <li key={i}>{i}</li>)}
+                                    </ul>
+                                  </div>
+                                  <div className="mt-4 pt-2 border-t border-white/[0.03] flex items-center justify-between text-[10px] font-mono">
+                                    <span>INTERESTED</span>
+                                    <div className={`w-3.5 h-3.5 rounded border ${
+                                      q7_aiSolutions.includes(name) ? "border-[#00cbd6] bg-[#00cbd6]" : "border-white/20"
+                                    }`} />
+                                  </div>
                                 </div>
-                                <div className="mt-4 pt-2 border-t border-white/[0.03] flex items-center justify-between text-[10px] font-mono">
-                                  <span>INTERESTED</span>
-                                  <div className={`w-3.5 h-3.5 rounded border ${
-                                    q7_aiSolutions.includes("AI Assistant") ? "border-[#00cbd6] bg-[#00cbd6]" : "border-white/20"
-                                  }`} />
-                                </div>
-                              </div>
-
-                              {/* AI Business Agent */}
-                              <div
-                                onClick={() => toggleSelect(q7_aiSolutions, setQ7_aiSolutions, "AI Business Agent")}
-                                className={`p-4 rounded-xl border transition-all cursor-pointer text-left flex flex-col justify-between h-full ${
-                                  q7_aiSolutions.includes("AI Business Agent")
-                                    ? "bg-[#00cbd6]/[0.05] border-[#00cbd6]/30 text-white"
-                                    : "bg-white/[0.01] border-white/[0.05] text-white/60 hover:bg-white/[0.02]"
-                                }`}
-                              >
-                                <div className="space-y-1.5">
-                                  <span className="text-xs font-bold text-white block">AI Business Agent</span>
-                                  <ul className="text-[9px] text-[#8e8e89] space-y-1 list-disc pl-3 font-sans">
-                                    <li>Lead qualification</li>
-                                    <li>Automatic follow-ups</li>
-                                    <li>Automated workflows</li>
-                                  </ul>
-                                </div>
-                                <div className="mt-4 pt-2 border-t border-white/[0.03] flex items-center justify-between text-[10px] font-mono">
-                                  <span>INTERESTED</span>
-                                  <div className={`w-3.5 h-3.5 rounded border ${
-                                    q7_aiSolutions.includes("AI Business Agent") ? "border-[#00cbd6] bg-[#00cbd6]" : "border-white/20"
-                                  }`} />
-                                </div>
-                              </div>
-
-                              {/* Custom AI System */}
-                              <div
-                                onClick={() => toggleSelect(q7_aiSolutions, setQ7_aiSolutions, "Custom AI System")}
-                                className={`p-4 rounded-xl border transition-all cursor-pointer text-left flex flex-col justify-between h-full ${
-                                  q7_aiSolutions.includes("Custom AI System")
-                                    ? "bg-[#00cbd6]/[0.05] border-[#00cbd6]/30 text-white"
-                                    : "bg-white/[0.01] border-white/[0.05] text-white/60 hover:bg-white/[0.02]"
-                                }`}
-                              >
-                                <div className="space-y-1.5">
-                                  <span className="text-xs font-bold text-white block">Custom AI System</span>
-                                  <ul className="text-[9px] text-[#8e8e89] space-y-1 list-disc pl-3 font-sans">
-                                    <li>Advanced integrations</li>
-                                    <li>Business-specific automation</li>
-                                    <li>Custom system pipelines</li>
-                                  </ul>
-                                </div>
-                                <div className="mt-4 pt-2 border-t border-white/[0.03] flex items-center justify-between text-[10px] font-mono">
-                                  <span>INTERESTED</span>
-                                  <div className={`w-3.5 h-3.5 rounded border ${
-                                    q7_aiSolutions.includes("Custom AI System") ? "border-[#00cbd6] bg-[#00cbd6]" : "border-white/20"
-                                  }`} />
-                                </div>
-                              </div>
+                              ))}
                             </div>
                           </div>
                         )}
 
-                        {/* Q8 */}
                         <div className="space-y-2 pt-2">
                           <label className="block text-xs font-semibold text-white/95">
                             8. What would you want the AI system to help you with?
@@ -756,7 +642,6 @@ export default function SurveyPage() {
                           <span className="font-mono text-xs uppercase text-white tracking-widest font-semibold">Design & User Experience</span>
                         </div>
 
-                        {/* Q9 */}
                         <div className="space-y-2">
                           <label className="block text-xs font-semibold text-white/95">
                             9. How would you like your website/system to look and feel?
@@ -773,7 +658,6 @@ export default function SurveyPage() {
                           />
                         </div>
 
-                        {/* Q10 */}
                         <div className="space-y-2 pt-2">
                           <label className="block text-xs font-semibold text-white/95">
                             10. Do you have any examples, competitors, or websites that inspire your vision?
@@ -799,18 +683,12 @@ export default function SurveyPage() {
                           <span className="font-mono text-xs uppercase text-white tracking-widest font-semibold">Final Project Details & Contact</span>
                         </div>
 
-                        {/* Timeline */}
                         <div className="space-y-3">
                           <label className="block text-xs font-semibold text-white/95">
                             What is your expected timeline for this project? <span className="text-[#00cbd6]">*</span>
                           </label>
                           <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 font-sans">
-                            {[
-                              "ASAP",
-                              "Within 1 month",
-                              "1–3 months",
-                              "No specific deadline"
-                            ].map((o) => (
+                            {["ASAP", "Within 1 month", "1–3 months", "No specific deadline"].map((o) => (
                               <div
                                 key={o}
                                 onClick={() => setTimeline(o)}
@@ -826,19 +704,12 @@ export default function SurveyPage() {
                           </div>
                         </div>
 
-                        {/* Budget */}
                         <div className="space-y-3 pt-2">
                           <label className="block text-xs font-semibold text-white/95">
                             What budget range are you considering for this project? <span className="text-[#00cbd6]">*</span>
                           </label>
                           <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-2 font-sans">
-                            {[
-                              "Under R5,000",
-                              "R5,000 – R15,000",
-                              "R15,000 – R50,000",
-                              "R50,000+",
-                              "Unsure, need guidance"
-                            ].map((b) => (
+                            {["Under R5,000", "R5,000 – R15,000", "R15,000 – R50,000", "R50,000+", "Unsure, need guidance"].map((b) => (
                               <div
                                 key={b}
                                 onClick={() => setBudget(b)}
@@ -854,7 +725,6 @@ export default function SurveyPage() {
                           </div>
                         </div>
 
-                        {/* Contact Information */}
                         <div className="space-y-4 pt-4 border-t border-white/[0.05]">
                           <label className="block text-xs font-bold text-white tracking-wide uppercase font-mono">
                             Contact Information <span className="text-[#00cbd6]">*</span>
@@ -863,7 +733,7 @@ export default function SurveyPage() {
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-1">
                               <label className="flex items-center gap-1.5 text-[9px] font-mono text-[#8e8e89] uppercase tracking-wider">
-                                <User className="w-3 w-3" /> Name Name
+                                <User className="w-3 h-3" /> Full Name
                               </label>
                               <input 
                                 type="text" 
@@ -875,7 +745,7 @@ export default function SurveyPage() {
                             </div>
                             <div className="space-y-1">
                               <label className="flex items-center gap-1.5 text-[9px] font-mono text-[#8e8e89] uppercase tracking-wider">
-                                <Briefcase className="w-3 w-3" /> Company Company
+                                <Briefcase className="w-3 h-3" /> Company
                               </label>
                               <input 
                                 type="text" 
@@ -887,7 +757,7 @@ export default function SurveyPage() {
                             </div>
                             <div className="space-y-1">
                               <label className="flex items-center gap-1.5 text-[9px] font-mono text-[#8e8e89] uppercase tracking-wider">
-                                <Mail className="w-3 w-3" /> Email Address
+                                <Mail className="w-3 h-3" /> Email Address
                               </label>
                               <input 
                                 type="email" 
@@ -899,7 +769,7 @@ export default function SurveyPage() {
                             </div>
                             <div className="space-y-1">
                               <label className="flex items-center gap-1.5 text-[9px] font-mono text-[#8e8e89] uppercase tracking-wider">
-                                <Phone className="w-3 w-3" /> Phone/WhatsApp
+                                <Phone className="w-3 h-3" /> Phone/WhatsApp
                               </label>
                               <input 
                                 type="tel" 
@@ -921,7 +791,6 @@ export default function SurveyPage() {
                       </div>
                     )}
 
-                    {/* Step Navigation Actions */}
                     <div className="flex items-center justify-between pt-4 border-t border-white/[0.05] mt-6">
                       {step > 1 ? (
                         <button 
@@ -986,7 +855,6 @@ export default function SurveyPage() {
                       </p>
                     </div>
 
-                    {/* Receipt code */}
                     <div className="inline-flex items-center gap-3 bg-white/[0.02] border border-white/[0.05] rounded-xl px-5 py-3 font-mono text-xs max-w-sm mx-auto">
                       <div className="text-left">
                         <span className="text-[9px] text-white/30 block tracking-widest uppercase">DISCOVERY TICKET ID:</span>
@@ -1015,7 +883,6 @@ export default function SurveyPage() {
           </motion.div>
         )}
 
-        {/* AI EXPERT BLUEPRINT CONSOLE MODE */}
         {currentMode === "ai" && (
           <motion.div
             key="ai-builder-panel"
@@ -1025,9 +892,7 @@ export default function SurveyPage() {
             transition={{ duration: 0.3 }}
             className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
           >
-            {/* Main Interactive Chat console */}
             <div className="lg:col-span-8 bg-[#090909]/60 backdrop-blur-md rounded-2xl border border-white/[0.04] flex flex-col h-[520px] overflow-hidden relative">
-              {/* Chat Header */}
               <div className="p-4 border-b border-white/[0.05] bg-white/[0.01] flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Bot className="w-4 h-4 text-purple-400" />
@@ -1044,8 +909,8 @@ export default function SurveyPage() {
                 </div>
               </div>
 
-              {/* Chat Messages Section */}
-              <div className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-4">
+              {/* Chat messages — ref on this div, scroll happens here not on the page */}
+              <div ref={chatContainerRef} className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-4">
                 {messages.map((msg, index) => (
                   <div 
                     key={index} 
@@ -1066,7 +931,6 @@ export default function SurveyPage() {
                         {msg.text}
                       </div>
 
-                      {/* Diagnostic Dynamic blueprint layout */}
                       {msg.systemLayout && (
                         <motion.div 
                           className="p-4 rounded-xl bg-purple-500/[0.02] border border-purple-500/10 space-y-3 font-mono text-[10px]"
@@ -1119,15 +983,19 @@ export default function SurveyPage() {
                     <span className="font-mono text-[8px] text-white/30">COMPILING DIAGNOSTICS...</span>
                   </div>
                 )}
-                <div ref={chatEndRef} />
               </div>
 
-              {/* Chat action box footer */}
               <form onSubmit={(e) => handleSendMessage(e)} className="p-4 border-t border-white/[0.05] bg-[#090909]/60 flex gap-2">
                 <input 
                   type="text" 
                   value={userInput}
                   onChange={(e) => setUserInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSendMessage(e as any);
+                    }
+                  }}
                   placeholder="e.g. Design a customer CRM portal with automatic Firestore metrics..."
                   disabled={isTyping}
                   className="flex-1 bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-purple-500/50 placeholder-white/20 transition-all font-sans"
@@ -1146,7 +1014,6 @@ export default function SurveyPage() {
               </form>
             </div>
 
-            {/* Sidebar quick ideas desk */}
             <div className="lg:col-span-4 space-y-4">
               <div className="p-5 rounded-2xl border border-white/[0.04] bg-[#090909]/40 backdrop-blur-md space-y-4">
                 <div className="flex items-center gap-2 pb-3 border-b border-white/[0.05]">
@@ -1178,7 +1045,6 @@ export default function SurveyPage() {
           </motion.div>
         )}
       </AnimatePresence>
-
     </div>
   );
 }
